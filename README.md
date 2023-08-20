@@ -1,4 +1,5 @@
 # csShioaji
 Shioaji API real trade
 
-![Console.WriteLine](https://i.imgur.com/So14Bz4.png)
+![data1.TXFR1CB()](https://i.imgur.com/So14Bz4.png)
+![data1.MyKbars(10)](https://i.imgur.com/jNJOOC6.png)
