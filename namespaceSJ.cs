@@ -1,8 +1,3 @@
-﻿using System.Collections;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
 using System.Data;
 using System;
 using Microsoft.Data.Analysis;
@@ -12,20 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-
 namespace namespaceSJ
-// 命名空間亦可再內裝一層命名空間，只要在program.cs Using時多個「.」就好
 {
     class SJCls
     {
-        public static int ClsSelfAttribute = 999;
-        public static void ClsWithoutInitMethod()
-        {
-            Console.WriteLine("類的靜態方法(天生就會的)，不屬於創建出來的物件用的方法");
-        }
-        //==================================================================================================
-
-        // 類有基本屬性，要嘛是在實例化後才去一行一行賦值，不然就是弄個ctor讓實例化當下隨著參數賦值
         public Shioaji _api;
         public JsonElement root;
         public SJCls()
@@ -35,10 +20,6 @@ namespace namespaceSJ
             _api.Login(root.GetProperty("API_Key").GetString(), root.GetProperty("Secret_Key").GetString());
             //_api.ca_activate(@"C:\Users\hhped\Desktop\_csSJ\Sinopac.pfx", root.GetProperty("ca_passwd").GetString(), root.GetProperty("person_id").GetString());
         }
-        //_api.Subscribe(_api.Contracts.Futures["TXF"]["TXF202308"], QuoteType.tick);
-        //_api.Subscribe(_api.Contracts.Options["TX4"]["TX420230816350C"], QuoteType.tick);
-        //_api.Subscribe(_api.Contracts.Stocks["TSE"]["2330"], QuoteType.tick);
-
 
         public void SpreadQuote(int backwardation, string weekth, string yearmonth)
         {
@@ -80,20 +61,6 @@ namespace namespaceSJ
                                          new PrimitiveDataFrameColumn<long>("Volume", kbars.Volume.ToList())
                                          );
             Console.WriteLine(df.Tail(len));
-            
-            try
-            {
-                // i => i[0] 0時間 1開 2高 3低 4收 5量
-                df.Rows.Cast<DataFrameRow>().Select(i => i).ToList().ForEach(Console.WriteLine);
-                df.Rows.Cast<DataFrameRow>().ElementAtOrDefault(50).ToList().ForEach(Console.WriteLine);
-
-                //Console.WriteLine(df.Rows.Cast<DataFrameRow>().ElementAtOrDefault(^1));
-                //Console.WriteLine(df.Rows.Cast<DataFrameRow>().ElementAtOrDefault(^1)[4]);
-            }
-            catch (Exception e1)
-            {
-                Console.WriteLine($"又是型別錯誤？___{e1.Message}");
-            }
         }
 
 
@@ -106,7 +73,6 @@ namespace namespaceSJ
             {
                 var kbar_body = 100 * (ScannersAmountRank[i].close - ScannersAmountRank[i].open) / ScannersAmountRank[i].open;
                 var updn_pct = Math.Round(ScannersAmountRank[i].change_price * 100 / ScannersAmountRank[i].open, 2);
-                // Console.WriteLine($"{ScannersAmountRank[i].name} K棒%數{a*100:F2}");
                 Console.WriteLine(string.Join("\t",
                                   ScannersAmountRank[i].name,
                                   ScannersAmountRank[i].code,
@@ -119,7 +85,6 @@ namespace namespaceSJ
             for (int i = 0; i < ScannersChangePercentRank.Count; i++)
             {
                 var kbar_body = 100 * (ScannersChangePercentRank[i].close - ScannersChangePercentRank[i].open) / ScannersChangePercentRank[i].open;
-                //漲幅排行肯定紅K，感覺不必再看C-O的符號 與 chg/O
                 Console.WriteLine(string.Join("\t",
                                   ScannersChangePercentRank[i].name,
                                   ScannersChangePercentRank[i].code,
@@ -127,8 +92,6 @@ namespace namespaceSJ
                                   (ScannersChangePercentRank[i].total_amount / 100_000_000).ToString().PadLeft(3)
                                   ));
             }
-            // 成交量與漲幅混加，但怕太混亂，先不用
-            //var ScannersAmountRank1 = ScannersAmountRank.Concat(ScannersChangePercentRank);
         }
 
 
@@ -160,7 +123,6 @@ namespace namespaceSJ
         public void TXFR1CB()
         {
             _api.SetQuoteCallback_v1(myQuoteCB_v1);
-            //_api.SetOrderCallback(order_cb);
         }
         private static void myQuoteCB_v1(Exchange exchange, dynamic quote)
         {
@@ -173,7 +135,6 @@ namespace namespaceSJ
         }
         private static void order_cb(OrderState orderState, dynamic msg)
         {
-            // 1.operation, 2.order兩層, 3.status, 4.contract  會報錯：DateTimeOffset.FromUnixTimeSeconds(msg.status.exchange_ts).ToString('yyyy-MM-dd HH:mm:ss')
             Console.WriteLine(
                 // op_code 只能是00 其它的都是異常
                 $"1. operation執行：\n{msg.operation.op_type}、{msg.operation.op_code }、{msg.operation.op_msg}" +
