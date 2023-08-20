@@ -18,7 +18,7 @@ namespace namespaceSJ
             this._api = new Shioaji();
             this.root = JsonDocument.Parse(File.ReadAllText(@"C:\Users\hhped\Desktop\_csSJ\Sinopac.json")).RootElement;
             _api.Login(root.GetProperty("API_Key").GetString(), root.GetProperty("Secret_Key").GetString());
-            //_api.ca_activate(@"C:\Users\hhped\Desktop\_csSJ\Sinopac.pfx", root.GetProperty("ca_passwd").GetString(), root.GetProperty("person_id").GetString());
+            _api.ca_activate(@"D:\csSJ\Sinopac.pfx", root.GetProperty("ca_passwd").GetString(), root.GetProperty("person_id").GetString());
         }
 
         public void SpreadQuote(int backwardation, string weekth, string yearmonth)
