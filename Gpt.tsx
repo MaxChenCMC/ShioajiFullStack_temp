@@ -7,23 +7,19 @@ const gpt = () => {
     return (
         <Grid container direction="column" spacing={2}>
             <NavBar/>
-            {/* Upper Half */}
-            <Grid item container>
-
-                {/* Part A */}
-                <Grid item xs={4}>
-                    <Paper>Part A</Paper>
+            <Grid item container spacing={2}>
+                {/* Grid的height調了會看不出來，調paper的height才有影響可見；若這裡height調300(比B區300+100+200少)，那D區不會被遮到，仍會擠出第一個Grid(即ABC)區之外，但若調成700那D區就會再下移*/}
+                <Grid item style={{width:900, height:700}}>
+                    <Paper style={{height:350}}>Part A</Paper>
                 </Grid>
 
-                {/* Part B */}
-                <Grid item xs={4}>
-                    <Paper>Part B</Paper>
-                    <Paper>Part B</Paper>
-                    <Paper>Part B</Paper>
+                <Grid item style={{width:400}} >
+                    <Paper style={{height:300}}>Part B</Paper>
+                    <Paper style={{height:100}}>Part B</Paper>
+                    <Paper style={{height:200}}>Part B</Paper>
                 </Grid>
 
-                {/* Part C */}
-                <Grid item xs={4}>
+                <Grid item style={{width:900, height:700}}>
                     <Paper>Part C</Paper>
                 </Grid>
             </Grid>
