@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import {
-    Typography, AppBar, makeStyles, Toolbar, Box
+    AppBar, Toolbar, Box, Grid, Paper, Button, IconButton,
+    Typography,
+    makeStyles
 } from '@material-ui/core'
-
-
-const useStyles = makeStyles(() => ({
-    App: { color: 'black', backgroundColor: '#a2d1fa', minHeight: "70vh" },
-    headerFont: { fontSize: '24px', textAlign: 'center' },
-    cellFontL: { fontSize: '18px', textAlign: 'left' },
-    cellFontC: { fontSize: '18px', textAlign: 'center' },
-    cellFontR: { fontSize: '18px', textAlign: 'center' },
-    tbar: { backgroundColor: '#red', },
-    Layout: {},
-}));
-
+import { Height } from '@mui/icons-material';
 
 const NavBar = () => {
-
-    const classes = useStyles();
 
     const [TbarTseTxfOtc, setTbarTseTxfOtc] = useState<any[]>([])
     useEffect(() => {
@@ -35,31 +24,28 @@ const NavBar = () => {
         fetchPosts();
     }, []);
 
+    const dd = [17798.12, -77.05, "-0.43"]
+    const acct = [777777, 22222]
     return (
-        <AppBar position='static' style={{ height: 80, padding: 10 }} >
+        <AppBar position='static' style={{ height: 110, padding: 20 }} >
             <Toolbar>
-                <Box sx={{ flexGrow: 1 }}>
-                    指期：{TbarTseTxfOtc[0]}<br />漲跌：{TbarTseTxfOtc[1]}<br />幅度：{TbarTseTxfOtc[2]}%
-                    {/* <Typography variant='h6' component="div">
-                        指期:{TbarTseTxfOtc[0]}&nbsp;漲跌:{TbarTseTxfOtc[1]}&nbsp;{TbarTseTxfOtc[2]}%
-                        <br />
-                        加權:{TbarTseTxfOtc[3]}&nbsp;漲跌:{TbarTseTxfOtc[4]}&nbsp;{TbarTseTxfOtc[5]}%
-                        <br />
-                        櫃買:{TbarTseTxfOtc[6]}&nbsp;漲跌:{TbarTseTxfOtc[7]}&nbsp;{TbarTseTxfOtc[8]}%
-                    </Typography> */}
-                </Box>&nbsp;&nbsp;&nbsp;
-                <Box sx={{ flexGrow: 1 }}>
-                    加權：{TbarTseTxfOtc[3]}<br />漲跌：{TbarTseTxfOtc[4]}<br />幅度：{TbarTseTxfOtc[5]}%
-                </Box>&nbsp;&nbsp;&nbsp;
-                <Box sx={{ flexGrow: 1 }}>
-                    櫃買：{TbarTseTxfOtc[6]}<br />漲跌：{TbarTseTxfOtc[7]}<br />幅度：{TbarTseTxfOtc[8]}%
-                </Box>
-                <Typography variant='h3' component="div" align='center'>【Max📈】</Typography>
-                <Box sx={{ flexGrow: 1, textAlign: 'right' }}>
-                    證：{TbarTseTxfOtc[9]}<br />期：0{TbarTseTxfOtc[10]}<br />{Date().slice(0, 10)}
-                </Box>
+                <Grid item container justifyContent="space-between" alignItems="center">
+                    <Grid item xs={4}>
+                        <Paper style={{ width: 150, height: 65 }}>加權：{dd[0]}<br />漲跌：{dd[1]}<br />漲幅：{dd[2]}% </Paper>
+                        {/* <Paper style={{ width: 150 }}>加權：{dd[0]}<br />漲跌：{dd[1]}<br />漲幅{dd[2]}% </Paper> */}
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Box display="flex" alignItems="center">
+                            <Typography variant="h2" align='center'>【 M a x📈 】</Typography>
+                            <Typography variant="subtitle2" align='center'>{Date().toString().slice(0, 10)}</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Typography variant="h6" align='right'>證：{acct[0]}<br />期：0{acct[1]}</Typography>
+                    </Grid>
+                </Grid>
             </Toolbar>
-        </AppBar>
+        </AppBar >
     )
 }
 export default NavBar
