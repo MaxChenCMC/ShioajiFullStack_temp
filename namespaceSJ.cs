@@ -20,25 +20,7 @@ namespace namespaceSJ
             _api.Login(root.GetProperty("API_Key").GetString(), root.GetProperty("Secret_Key").GetString());
             _api.ca_activate(@"D:\csSJ\Sinopac.pfx", root.GetProperty("ca_passwd").GetString(), root.GetProperty("person_id").GetString());
         }
-
-        public void SpreadQuote(int backwardation, string weekth, string yearmonth)
-        {
-            var par0 = _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"] })[0].close;
-            var par1 = Math.Ceiling(par0 / 50) * 50 + backwardation;
-            var opt_code = _api.Contracts.Options[weekth];
-            SJList strBC = _api.Snapshots(new List<IContract>() { opt_code[weekth + yearmonth + (par1 - 100) + "C"] });
-            SJList strSC = _api.Snapshots(new List<IContract>() { opt_code[weekth + yearmonth + par1 + "C"] });
-            SJList strSP = _api.Snapshots(new List<IContract>() { opt_code[weekth + yearmonth + par1 + "P"] });
-            SJList strBP = _api.Snapshots(new List<IContract>() { opt_code[weekth + yearmonth + (par1 + 100) + "P"] });
-            var bcBid = strBC[0].sell_price;
-            var scAsk = strSC[0].buy_price;
-            var spAsk = strSP[0].buy_price;
-            var bpBid = strBP[0].sell_price;
-            Console.WriteLine($"{bcBid}、{scAsk}、{spAsk}、{bpBid}");
-            Console.WriteLine($"SCSP價平{par1}，BPSP報價{bpBid - spAsk}、BCSC報價{bcBid - scAsk}。溢{bcBid - scAsk + bpBid - spAsk - 94}");
-        }
-
-
+        
         public void MyKbars(int len)
         {
             Kbars kbars = _api.Kbars(_api.Contracts.Futures["TXF"]["TXFR1"],
@@ -63,37 +45,14 @@ namespace namespaceSJ
             Console.WriteLine(df.Tail(len));
         }
 
-
-        public void MyScanners()
-        {
-            SJList ScannersAmountRank = _api.Scanners(date: DateTime.Now.ToString("yyyy-MM-dd"), scannerType: ScannerType.AmountRank, count: 10);
-            SJList ScannersChangePercentRank = _api.Scanners(date: DateTime.Now.ToString("yyyy-MM-dd"), scannerType: ScannerType.ChangePercentRank, count: 5);
-
-            for (int i = 0; i < ScannersAmountRank.Count; i++)
-            {
-                var kbar_body = 100 * (ScannersAmountRank[i].close - ScannersAmountRank[i].open) / ScannersAmountRank[i].open;
-                var updn_pct = Math.Round(ScannersAmountRank[i].change_price * 100 / ScannersAmountRank[i].open, 2);
-                Console.WriteLine(string.Join("\t",
-                                  ScannersAmountRank[i].name,
-                                  ScannersAmountRank[i].code,
-                                  Math.Round(kbar_body, 2).ToString().PadLeft(5).PadLeft(1),
-                                  (ScannersAmountRank[i].total_amount / 100_000_000).ToString().PadLeft(3),
-                                  (ScannersAmountRank[i].close > ScannersAmountRank[i].open) ? "↑" : "↓",
-                                  updn_pct.ToString().PadLeft(5).PadLeft(1)
-                                  ));
-            }
-            for (int i = 0; i < ScannersChangePercentRank.Count; i++)
-            {
-                var kbar_body = 100 * (ScannersChangePercentRank[i].close - ScannersChangePercentRank[i].open) / ScannersChangePercentRank[i].open;
-                Console.WriteLine(string.Join("\t",
-                                  ScannersChangePercentRank[i].name,
-                                  ScannersChangePercentRank[i].code,
-                                  Math.Round(kbar_body, 2).ToString().PadLeft(5).PadLeft(1),
-                                  (ScannersChangePercentRank[i].total_amount / 100_000_000).ToString().PadLeft(3)
-                                  ));
-            }
-        }
-
+        // Console.WriteLine(string.Join("\t",
+        //                   ScannersAmountRank[i].name,
+        //                   ScannersAmountRank[i].code,
+        //                   Math.Round(kbar_body, 2).ToString().PadLeft(5).PadLeft(1),
+        //                   (ScannersAmountRank[i].total_amount / 100_000_000).ToString().PadLeft(3),
+        //                   (ScannersAmountRank[i].close > ScannersAmountRank[i].open) ? "↑" : "↓",
+        //                   updn_pct.ToString().PadLeft(5).PadLeft(1)
+        //                   ));
 
         public void MyListPositions(string mode)
         {
@@ -118,7 +77,6 @@ namespace namespaceSJ
                 Console.WriteLine("沒庫存");
             }
         }
-
 
         public void TXFR1CB()
         {
