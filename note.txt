@@ -47,6 +47,6 @@ TableRepo.tsx
 		✔R1up：AmountRankApexCharts.tsx【Scanners + ApexCharts】
 		✔R1dn：Scanners.tsx【Scanners】
 		✔R2up：TXR1.tsx【TickTimeRange + ApexCharts】
-		R2dn：Premium.tsx【Snapshots】
+		✔R2dn：OpPremium.tsx【Snapshots】
 		R3：💢CustomerScanners.tsx【Snapshots】
 		
