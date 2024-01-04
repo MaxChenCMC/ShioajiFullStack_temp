@@ -42,7 +42,7 @@ TextRepo.tsx
 		Layout.tsx【】
 		L1：💢CustomerScanners.tsx【Snapshots】
 		L2：💢Bias.tsx【Snapshots】
-		R1up：ApexCharts.tsx【Scanners + ApexCharts】
+		R1up：AmountRankApexCharts.tsx【Scanners + ApexCharts】
 		R1dn：Scanners.tsx【Scanners】
 		R2up：TXR1.tsx【TickTimeRange + ApexCharts】
 		R2dn：Premium.tsx【Snapshots】
