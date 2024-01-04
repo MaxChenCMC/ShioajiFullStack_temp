@@ -1,0 +1,43 @@
+串react時，starup.cs裡寫cors防呆
+
+
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+            ＡＳＰ．ＮＥＴ
+nuget裝Shioaji
+========================================
+ShioajiRepoController.ipynb
+OpenApiRepoController.ipynb
+----------------------------------------
+Program.cs
+◢Controllers
+	ShioajiApiController.cs
+	OpenApiTwseController.cs
+	
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+               ＲＥＡＣＴ
+npx create-react-app prj-name --template typescript
+npm i @mui/material @mui/icons-material @emotion/react @emotion/styled
+npm i @material-ui/core
+
+npm i axios
+npm i apexcharts, material-ui
+npm i react-router-dom 裝這樣才能支援分頁路由
+
+========================================
+TableRepo.tsx
+GridRepo.tsx
+TextRepo.tsx
+----------------------------------------
+◢src
+	App.tsx
+	◢components
+		NavBar.tsx【】
+		Layout.tsx【】
+		L1：💢CustomerScanners.tsx【Snapshots】
+		L2：💢Bias.tsx【Snapshots】
+		R1up：ApexCharts.tsx【Scanners + ApexCharts】
+		R1dn：Scanners.tsx【Scanners】
+		R2up：TXR1.tsx【TickTimeRange + ApexCharts】
+		R2dn：Premium.tsx【Snapshots】
+		R3：💢CustomerScanners.tsx【Snapshots】
+		
