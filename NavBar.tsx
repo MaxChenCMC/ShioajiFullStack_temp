@@ -49,3 +49,37 @@ const NavBar = () => {
     )
 }
 export default NavBar
+
+
+
+var Scanners_AmountRank = _api.Scanners(scannerType:ScannerType.AmountRank, date:DateTime.Now.ToString("yyyy-MM-dd"), count:2);
+
+// _AmountRank"s" 最終回傳複式dict
+// _AmountRank 個股dict
+// _temp 個股逐值
+List<Dictionary<string, List<object>>> _AmountRanks = new List<Dictionary<string, List<object>>>();
+for (int i = 0; i < Scanners_AmountRank.ToArray().Length ; i++)
+{
+    Dictionary<string, List<object>> _AmountRank = new Dictionary<string, List<object>>();
+    List<object> _temp = new List<object>();
+    var _lastClose = Scanners_AmountRank[i].close - Scanners_AmountRank[i].change_price;
+    _temp.Add(Scanners_AmountRank[i].name);
+    _temp.Add(Math.Round(Scanners_AmountRank[i].change_price * 100 / _lastClose, 2));
+    _temp.Add(Scanners_AmountRank[i].tick_type == "1" ? "內":"外");
+    _temp.Add(Math.Round(100 *(Scanners_AmountRank[i].open - _lastClose) / _lastClose, 2));
+    _temp.Add(Math.Round(100 *(Scanners_AmountRank[i].high - _lastClose) / _lastClose, 2));
+    _temp.Add(Math.Round(100 *(Scanners_AmountRank[i].low - _lastClose) / _lastClose, 2));
+    _temp.Add(Math.Round(100 *(Scanners_AmountRank[i].close - _lastClose)  /_lastClose, 2));
+    _AmountRank.Add(Scanners_AmountRank[i].code, _temp);
+    _AmountRanks.Add(_AmountRank);
+}
+
+// _AmountRanks
+
+
+var res = _api.Scanners(scannerType:ScannerType.AmountRank, date:DateTime.Now.ToString("yyyy-MM-dd"), count:20);
+List<long> _temp = new List<long>();
+foreach(var i in res){
+    _temp.Add((long)i.total_amount);
+}
+_temp.Sum() / 100_000_000
