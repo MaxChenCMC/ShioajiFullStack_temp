@@ -10,12 +10,12 @@ nuget裝Shioaji
 其它2
 ========================================
 ✔ShioajiRepoController.ipynb
-✔OpenApiRepoController.ipynb
+OpenApiRepoController.ipynb
 ----------------------------------------
 ✔Program.cs
 ◢Controllers
 	ShioajiApiController.cs
-	OpenApiTwseController.cs
+	✔OpenApiTwseController.cs
 	
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
                ＲＥＡＣＴ
