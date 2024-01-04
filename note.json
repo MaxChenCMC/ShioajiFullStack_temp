@@ -1,3 +1,5 @@
+建ASP.NET Core Web API選.NET 5.0，別勾HTTPS
+
 串react時，starup.cs裡寫cors防呆
 
 
@@ -15,14 +17,19 @@ Program.cs
 	
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
                ＲＥＡＣＴ
-npx create-react-app prj-name --template typescript
+在CORE目標目錄路徑處輸入cmd ☛ npx create-react-app prj-name --template typescript
+終端機導向剛建好的react目錄，輸入「code .」叫出VSC
+(public資料夾的index.html的<div id="root"></div>是引用src資料夾的index.js裡的document.getElementById('root'))
 npm i @mui/material @mui/icons-material @emotion/react @emotion/styled
 npm i @material-ui/core
-
 npm i axios
 npm i apexcharts, material-ui
 npm i react-router-dom 裝這樣才能支援分頁路由
-
+- 找Google Web Fonts下方的指令，貼到public資料夾裡的index.html的18行，某個<link開頭的下一行；roboto font也一樣
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"/>
+去src資料夾裡的index.css裡body段落的font-family把Roboto移到最優先
+<Container maxWidth="md">      (md是指窗視一半)
 ========================================
 TableRepo.tsx
 GridRepo.tsx
