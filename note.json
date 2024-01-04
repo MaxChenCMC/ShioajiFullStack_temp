@@ -6,11 +6,13 @@
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
             ＡＳＰ．ＮＥＴ
 nuget裝Shioaji
+其它1
+其它2
 ========================================
-ShioajiRepoController.ipynb
-OpenApiRepoController.ipynb
+✔ShioajiRepoController.ipynb
+✔OpenApiRepoController.ipynb
 ----------------------------------------
-Program.cs
+✔Program.cs
 ◢Controllers
 	ShioajiApiController.cs
 	OpenApiTwseController.cs
@@ -32,19 +34,19 @@ npm i react-router-dom 裝這樣才能支援分頁路由
 <Container maxWidth="md">      (md是指窗視一半)
 ========================================
 TableRepo.tsx
-GridRepo.tsx
-TextRepo.tsx
+✔GridRepo.tsx
+✔TextRepo.tsx
 ----------------------------------------
 ◢src
 	App.tsx
 	◢components
-		NavBar.tsx【】
-		Layout.tsx【】
+		✔NavBar.tsx【】
+		✔Layout.tsx【】
 		L1：💢CustomerScanners.tsx【Snapshots】
 		L2：💢Bias.tsx【Snapshots】
-		R1up：AmountRankApexCharts.tsx【Scanners + ApexCharts】
-		R1dn：Scanners.tsx【Scanners】
-		R2up：TXR1.tsx【TickTimeRange + ApexCharts】
+		✔R1up：AmountRankApexCharts.tsx【Scanners + ApexCharts】
+		✔R1dn：Scanners.tsx【Scanners】
+		✔R2up：TXR1.tsx【TickTimeRange + ApexCharts】
 		R2dn：Premium.tsx【Snapshots】
 		R3：💢CustomerScanners.tsx【Snapshots】
 		
