@@ -20,6 +20,9 @@ nuget裝Shioaji
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
                ＲＥＡＣＴ
 在CORE目標目錄路徑處輸入cmd ☛ npx create-react-app prj-name --template typescript
+npm create vite@latest --react --typescript    fbl-test --template typescript
+npm create vite@latest yourprjname ☛ React ☛typescript
+npx是裝了就刪非全局，npm反之
 終端機導向剛建好的react目錄，輸入「code .」叫出VSC
 (public資料夾的index.html的<div id="root"></div>是引用src資料夾的index.js裡的document.getElementById('root'))
 npm i @mui/material @mui/icons-material @emotion/react @emotion/styled
@@ -32,6 +35,8 @@ npm i react-router-dom 裝這樣才能支援分頁路由
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"/>
 去src資料夾裡的index.css裡body段落的font-family把Roboto移到最優先
 <Container maxWidth="md">      (md是指窗視一半)
+終端機路徑不拘直接npx npkill跑一下後可挑肥大的刪
+jsx即html混js在同個檔，就算副檔名是js IDE仍可識別出，小括放html、大括放component，若html被塞進component就歸大括號
 ========================================
 TableRepo.tsx
 ✔GridRepo.tsx
