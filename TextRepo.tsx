@@ -29,7 +29,8 @@ const TextRepo = () => {
             <Typography variant="body1" align="justify" style={{ textDecoration: 'underline' }}>
                 Body 1
             </Typography>
-
+            <TableCell className={classes.cellFontC}>{((row.close - row.open) >= 0 ? "↗" : "↘")}</TableCell>
+            <TableCell className={classes.cellFontR}>{Math.round(row.price_range / row.average_price * 100)} %</TableCell>
             <ThemeProvider theme={theme}>
                 <Typography variant="h1">Hello, world!</Typography>
             </ThemeProvider>
