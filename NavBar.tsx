@@ -36,7 +36,7 @@ const NavBar = () => {
                     </Grid>
                     <Grid item xs={4}>
                         <Box display="flex" alignItems="center">
-                            <Typography variant="h2" align='center'>【 M a x📈 】</Typography>
+                            <Typography variant="h2" align='center'> 📉 ＭＡＸ 📈 </Typography>
                             <Typography variant="subtitle2" align='center'>{Date().toString().slice(0, 10)}</Typography>
                         </Box>
                     </Grid>
