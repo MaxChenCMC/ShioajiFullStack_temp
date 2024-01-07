@@ -1,78 +1,77 @@
-import React from 'react';
-import { Grid, Paper } from '@material-ui/core';
-import NavBar from './NavBar';
-import { Scanners} from './Scanners';
+import * as React from 'react';
+import { Typography, Box, Paper, Grid, styled } from '@mui/material';
+import AmountRankApexCharts from './AmountRankApexCharts';
+import TicksLastCount from './TicksLastCount';
+import OpPremium from './OpPremium';
 import { BlueChips } from './BlueChips';
-import { Chart } from './Chart';
 
-const gpt = () => {
+
+// two types of layout: containers and items.
+// Item widths are set in percentages, so they're always fluid and sized relative to their parent element.支援padding
+// RWD五個斷點 xs, sm, md, lg, and xl僅適用寬, 但不適用direction="column"，以< xs={12} sm={6} >為例  螢幕寬超過600px就Viewport 6 col寬，若比600px窄就12 col寬
+// xs={12} sizes a component to occupy the full width of its parent container, regardless of the viewport size
+// Responsive values is supported by:columns,columnSpacing,direction,rowSpacing,spacing
+
+// const Item = styled(Paper)(({ theme }) => ({
+//     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+//     ...theme.typography.body2,
+//     padding: theme.spacing(1),
+//     textAlign: 'center',
+//     color: theme.palette.text.secondary,
+// }));
+
+const Layout = () => {
     return (
-        <Grid container direction="column" spacing={2}>
-            {/* A、B1 B2 B3、C */}
-            <Grid item container spacing={2}>
-                {/* Grid item A 的height定義最多到這(不過調了會看不出來)，若height A調300(比height B:300+100+200少)那D區不會被遮到，仍會擠出第一個Grid(即ABC)區之外
-                調paper的height因有陰影才可見，，但若調成700那D區就會再下移*/}
-                <Grid item style={{ width: 900, height: 600 }}>
-                    {/* <Paper style={{ height: 600 }}>Part A</Paper> */}
-                    <Scanners/>
+        <Grid container spacing={1} paddingTop={1} paddingLeft={1} paddingRight={1}>
+            {/* 有要細切就要用container再細分item，像這就外最層container的左item*/}
+            <Grid item xs={9}>
+
+                <Grid container spacing={1}>
+                    <Grid item xs={12} >
+                        <AmountRankApexCharts />
+                    </Grid>
                 </Grid>
 
-                {/* spacing好像只對grid有效，若grid裡層是Paper那也沒用  */}
-                <Grid item style={{ width: 400 }}>
-                    {/* <Paper style={{ height: 300 }}>Part B</Paper> */}
-                    {/* <Paper style={{ height: 100 }}>Pasdfsdfrt B</Paper> */}
-                    {/* <Paper style={{ height: 200 }}>Part B</Paper> */}
-                    <Chart/>
+                <Grid container spacing={1}>
+                    <Grid item xs={8} >
+                        <Grid container spacing={1}>
+                            <Grid item xs={9} >
+                                <Typography variant="subtitle2" align='center' color='primary' noWrap >到時要寫在自己的coponent裡</Typography>
+                                <Paper style={{ height: 380 }}>1分K</Paper>
+                            </Grid>
+                            <Grid item xs={3} >
+                                {/* 怎麼cnt 15筆但畫面僅11筆 */}
+                                <TicksLastCount />
+                            </Grid>
+                            <Grid item xs={12} >
+                                <OpPremium />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={4} >
+                        <BlueChips />
+                    </Grid>
                 </Grid>
 
-                <Grid item style={{ width: 390 }}>
-                    {/* <Paper style={{ height: 600 }}>Part C</Paper> */}
-                    <BlueChips/>
+                <Grid container spacing={1}>
+                    <Grid item xs={3} ></Grid>
                 </Grid>
             </Grid>
 
-            {/* D1 D2 D3 D4 D5 */}
-            <Grid item container direction="row" spacing={2}>
+            {/* 有要細切就要用container再細分item，像這就外最層container的右item*/}
+            <Grid item xs={3} spacing={1}>
 
-                {/* Part E (with 9 cells) */}
-                <Grid item xs={3}>
-                    <Grid container direction="row" spacing={1}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((cell) => (
-                            <Grid item xs={4} key={cell}>
-                                <Paper>D{cell}</Paper>
-                            </Grid>
-                        ))}
+                <Grid container spacing={1}>
+                    <Grid item xs={12} >
+                        <Paper style={{ height: 440, textAlign: 'center' }}>自選股1</Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper style={{ height: 440, textAlign: 'center' }}>自選股2</Paper>
                     </Grid>
                 </Grid>
-
-                {/* Part D */}
-                <Grid item xs={3}>
-                    <Grid container direction="column" spacing={2}>
-                        <Grid item>
-                            <Paper style={{ height: 100 }}>E1</Paper>
-                        </Grid>
-                        <Grid item >
-                            <Paper style={{ height: 100 }}>E2</Paper>
-                        </Grid>
-                        <Grid item>
-                            <Paper style={{ height: 100 }}>E3</Paper>
-                        </Grid>
-                    </Grid>
-                </Grid>
-
-                {/* Part F */}
-                <Grid item xs={3}>
-                    <Paper style={{ height: 330 }}>F</Paper>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <Paper style={{ height: 165 }}>Part G</Paper>
-                    <Paper style={{ height: 165 }}>Part G</Paper>
-                </Grid>
-
             </Grid>
         </Grid>
-    );
+    )
 }
 
-export default gpt
+export default Layout

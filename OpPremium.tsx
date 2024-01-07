@@ -3,10 +3,10 @@ import {
     makeStyles, Grid, Box, Typography,
     TableContainer, Paper, Table, TableHead,
     TableBody, TableRow, TableCell,
-    Card, AppBar, Tab, Toolbar
+    Card, AppBar, Tab, Toolbar,
 } from '@material-ui/core'
 
-export const Chart = () => {
+export const OpPremium = () => {
 
     const [OpPremium, setOpPremium] = useState<any[]>([])
     useEffect(() => {
@@ -24,29 +24,63 @@ export const Chart = () => {
         fetchPosts();
     }, []);
 
+
+    // PositionList的API
+    // PositionList的API
+    // PositionList的API
+
+
+    const [Margin, setMargin] = useState<any[]>([])
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await fetch('http://localhost:57064/api/Margin');
+                if (!response.ok) {
+                    throw new Error('Error fetching data');
+                }
+                const data = await response.json();
+                console.log(data);
+                setMargin(data);
+            } catch (error) { console.log(error) }
+        };
+        fetchPosts();
+    }, []);
+
     return (
-        // item才適用xs={}
-        <TableContainer component={Paper} style={{ height: 600 }}>
-            <Grid container direction='row' justifyContent="space-between" alignItems='center'>
-                <Paper style={{ width: 115, height: 70, textAlign: 'center', padding: '2px' }}>
-                    BC：{OpPremium[0]}<br />
-                    SC：{OpPremium[1]}
-                </Paper>
-                <Paper style={{ width: 115, height: 70, textAlign: 'center', padding: '2px' }}>
-                    {OpPremium[0] - OpPremium[1]}<br />
-                    複式價差單<br />
-                    {OpPremium[2] - OpPremium[3]}
-                </Paper>
-                <Paper style={{ width: 115, height: 70, textAlign: 'center', padding: '2px' }}>
-                    BC：{OpPremium[2]}<br />
-                    SC：{OpPremium[3]}
-                </Paper>
-            </Grid>
-        </TableContainer>
+        <>
+            <Typography variant="subtitle2" align='center' color='primary' noWrap >選擇權區</Typography>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BCSC</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >【Parity Strike Price】</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BPSP</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >庫存<br />權益數</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                        <TableCell rowSpan={2} style={{ textAlign: 'center' }} >{OpPremium[2] - OpPremium[3]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[3]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[1]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[4]}</TableCell>
+                        <TableCell rowSpan={2} style={{ textAlign: 'center' }} >{OpPremium[4] - OpPremium[5]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >沒部位</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[2]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[0]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[5]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{Margin[0]}、{Margin[1]}、{Margin[2]}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </>
+
     )
 }
 
-
+export default OpPremium
 
 
 
