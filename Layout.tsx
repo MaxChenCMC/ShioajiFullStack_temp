@@ -35,11 +35,11 @@ const Layout = () => {
                 <Grid container spacing={1}>
                     <Grid item xs={8} >
                         <Grid container spacing={1}>
-                            <Grid item xs={9} >
+                            <Grid item xs={8} >
                                 <Typography variant="subtitle2" align='center' color='primary' noWrap >到時要寫在自己的coponent裡</Typography>
                                 <Paper style={{ height: 380 }}>1分K</Paper>
                             </Grid>
-                            <Grid item xs={3} >
+                            <Grid item xs={4} >
                                 {/* 怎麼cnt 15筆但畫面僅11筆 */}
                                 <TicksLastCount />
                             </Grid>
