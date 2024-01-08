@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,6 +14,7 @@ namespace ShioajiBackend.Controllers
     {
         #region 登入沒事不會改
         private static Shioaji _api = new Shioaji();
+
         public void Login()
         {
             string jsonString = File.ReadAllText("Sinopac.json");
@@ -66,8 +67,13 @@ namespace ShioajiBackend.Controllers
         /// <returns> 
         /// {"陽明" = [1.57, 2.79, -0.87, 1.22, 120], "台積電" : [-0.34, 0, -1.03, -0.69, 104], "..."=[...]} 
         /// </returns>
-        public Dictionary<string, List<double>> AmountRank(string yyyyMMdd)
+        public Dictionary<string, List<double>> AmountRank()
         {
+            string yyyyMMdd = "";
+            if (DateTime.Now.TimeOfDay >= new TimeSpan(0, 0, 0) && DateTime.Now.TimeOfDay <= new TimeSpan(8, 59, 59))
+            { yyyyMMdd = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"); }
+            else { yyyyMMdd = DateTime.Today.ToString("yyyy-MM-dd"); }
+
             var Scanners_AmountRank = _api.Scanners(scannerType: ScannerType.AmountRank, date: yyyyMMdd, count: 20);
             Dictionary<string, List<double>> _AmountRanks = new Dictionary<string, List<double>>();
             for (int i = 0; i < Scanners_AmountRank.ToArray().Length; i++)
@@ -101,26 +107,33 @@ namespace ShioajiBackend.Controllers
         /// <returns></returns>
         public Dictionary<string, List<object>> BlueChips()
         {
-            List<string> tw20 = new List<string>(){
-            "2330", "2454", "2317", "2412", "2382", "2881", "2308", "6505", "2882", "2303",
-            "3711", "2886", "2891", "1303", "1301"//, "2002", "1216", "2884", "2207", "5880",
-            };
             var _tw20 = new List<IContract>();
-            foreach (var i in tw20) { _tw20.Add(_api.Contracts.Stocks["TSE"][i]); }
-            // foreach (var i in new List<string> { "6488", "8069", "3529", "5347", "5274", "6446", "5483", "8299", "3293", "4966" })
-            // {_tw20.Add(_api.Contracts.Stocks["OTC"][i]);}
-            Dictionary<string, List<object>> _BlueChips = new Dictionary<string, List<object>>();
+            foreach (var i in new List<string> {
+                "2330", "2454", "2317", "2412", "2382", "2881", "2308", "6505", "2882", "2303",
+                "3711", "2886", "2891", "1303", "1301", "2002", "1216", "2884", "2207", "5880",
+            })
+            {
+                _tw20.Add(_api.Contracts.Stocks["TSE"][i]);
+            }
+
+            foreach (var i in new List<string> {
+                "6488", "8069", "3529", "5347", "5274", "6446", "5483", "8299", "3293", "4966"
+            })
+            {
+                _tw20.Add(_api.Contracts.Stocks["OTC"][i]);
+            }
+
             var src = _api.Snapshots(_tw20);
+            Dictionary<string, List<object>> _BlueChips = new Dictionary<string, List<object>>();
             for (int i = 0; i < src.ToArray().Length; i++)
             {
                 List<object> _temp = new List<object>();
                 _temp.Add(src[i].change_rate);
-                _temp.Add(Math.Round(src[i].total_amount / 100_000_000d, 2)); // 市值大但若沒成交量，硬算前20占日成交量幾趴好像沒意義
+                _temp.Add(Math.Round(src[i].total_amount / 100_000_000d, 2)); 
                 _temp.Add(src[i].tick_type);
                 _BlueChips.Add(src[i].code, _temp);
             }
-            // 莫名變成換股號排序，但想依成交量故在return做linq但好像就判定return出Enumerate型別≠函式的宣告，就判錯了
-            return _BlueChips.OrderByDescending(x => x.Value[1]).ToDictionary(entry => entry.Key, entry => entry.Value);
+            return _BlueChips.OrderByDescending(x => x.Key).ToDictionary(entry => entry.Key, entry => entry.Value);
         }
         #endregion
 
@@ -140,13 +153,16 @@ namespace ShioajiBackend.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="yyyyMMdd"></param>
-        /// <param name="cnt"></param>
         /// <returns></returns>
-        public Dictionary<string, double> TicksLastCount(string yyyyMMdd, int cnt)
+        public Dictionary<string, double> TicksLastCount()
         {
-            Ticks TicksQuery = new Ticks();
-            TicksQuery = _api.Ticks(_api.Contracts.Futures["TXF"]["TXFR1"], yyyyMMdd, TicksQueryType.LastCount, last_cnt: cnt);
+            //Ticks TicksQuery = new Ticks();
+            Ticks TicksQuery = _api.Ticks(_api.Contracts.Futures["TXF"]["TXFR1"],
+                //DateTimeOffset.FromUnixTimeMilliseconds(
+                //    _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"] })[0].ts
+                //    / 1000000).UtcDateTime.ToString("yyyy-MM-dd")
+                "2024-01-09",
+                TicksQueryType.LastCount, last_cnt: 120);
 
             List<DateTimeOffset> generalTimes = new List<DateTimeOffset>();
             foreach (long timestamp in TicksQuery.ts)
@@ -164,7 +180,7 @@ namespace ShioajiBackend.Controllers
                 if (combinedList.ContainsKey(tsFormat[i])) { combinedList[tsFormat[i]] = TicksQuery.close[i]; }
                 else { combinedList.Add(tsFormat[i], TicksQuery.close[i]); }
             }
-            return combinedList;
+            return combinedList.OrderByDescending(x => x.Key).ToDictionary(entry => entry.Key, entry => entry.Value);
         }
         #endregion
 
@@ -177,16 +193,17 @@ namespace ShioajiBackend.Controllers
         /// <param name="OptionWeek"></param>
         /// <param name="YearMonth"></param>
         /// <returns> [ 17500, 17600, 107, 58, 146, 92 ] </returns>
-        public List<object> OpPremium(double close, string OptionWeek, string YearMonth)
+        public List<object> OpPremium(string OptionWeek, string YearMonth)
         {
+            double close = _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"] })[0].close;
             var strikeLower = Math.Floor(close / 50) * 50;
             var strikeUpper = strikeLower + 100;
             var res = _api.Snapshots(new List<IContract>() {
-        _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeLower + "C"],
-        _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeUpper + "C"],
-        _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeUpper + "P"],
-        _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeLower + "P"],
-        });
+                _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeLower + "C"],
+                _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeUpper + "C"],
+                _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeUpper + "P"],
+                _api.Contracts.Options[OptionWeek][OptionWeek + YearMonth + strikeLower + "P"],
+                });
             List<object> op = new List<object>();
             op.Add(res[0].code.Substring(3, 5));
             op.Add(res[1].code.Substring(3, 5));
@@ -243,7 +260,7 @@ namespace ShioajiBackend.Controllers
     public class AmountRankChartsController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get() { return Ok(new SJCls().AmountRank("2024-01-05")); }
+        public IActionResult Get() { return Ok(new SJCls().AmountRank()); }
     }
 
 
@@ -251,11 +268,12 @@ namespace ShioajiBackend.Controllers
     public class BlueChipsController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get() { return Ok(
-            new SJCls().BlueChips()
+        public IActionResult Get()
+        {
             // 但用linq後就會從{ "1216": [ 0.41, "Sell", 4.87 ], "?": [?,?,?]} 變["1216": [ 0.41, "Sell", 4.87 ], "?": [?,?,?]]
             //.OrderByDescending(x => x.Value[1])
-            ); }
+            return Ok(new SJCls().BlueChips());
+        }
     }
 
 
@@ -264,7 +282,7 @@ namespace ShioajiBackend.Controllers
     public class TXFR1ChartController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get() { return Ok(new SJCls().TXFR1Chart("2024-01-05", "2024-01-05")); }
+        public IActionResult Get() { return Ok(new SJCls().TXFR1Chart("2024-01-08", "2024-01-09")); }
     }
 
 
@@ -272,7 +290,8 @@ namespace ShioajiBackend.Controllers
     public class TicksLastCountController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get() { return Ok(new SJCls().TicksLastCount("2024-01-08", 15)); }
+        //DateTime.Today.ToString("yyyy-MM-dd")
+        public IActionResult Get() { return Ok(new SJCls().TicksLastCount()); }
     }
 
 
@@ -280,8 +299,9 @@ namespace ShioajiBackend.Controllers
     [Route("api/[controller]")]
     public class OpPremiumController : ControllerBase
     {
+
         [HttpGet]
-        public IActionResult Get() { return Ok(new SJCls().OpPremium(17535, "TX2", "202401")); }
+        public IActionResult Get() { return Ok(new SJCls().OpPremium("TX2", "202401")); }
     }
 
 
