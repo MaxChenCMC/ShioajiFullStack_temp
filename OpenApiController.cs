@@ -193,6 +193,40 @@ namespace ShioajiBackend.Controllers
 // src_new.Where(x=> x.Key == "2609" || x.Key == "2603")
 
 
+
+// var client = new HttpClient();
+// var response = await client.GetAsync("https://openapi.twse.com.tw/v1/" + 
+// "exchangeReport/TWT84U" //上市個股股價升降幅度
+// );
+// var json = await response.Content.ReadAsStringAsync();
+// List<dynamic> src = JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+// // foreach(var i in
+// // src.Where(x => x.Code.Length == 4)
+// // src.OrderBy(x => x.PreviousDayPrice).Take(3)
+// // ){Console.WriteLine(i);}
+
+// Dictionary<string, Dictionary<string, object>> src_new = new Dictionary<string, Dictionary<string, object>>();
+// foreach (var item in src)
+// {
+//     src_new[item["Code"].ToString()] = new Dictionary<string, object>
+//     {
+//         { "Name", item["Name"].ToString()},
+//         { "TodayOpeningRefPrice", item["TodayOpeningRefPrice"].ToString()},
+//         { "PreviousDayOpeningRefPrice", item["PreviousDayOpeningRefPrice"].ToString()},
+//         { "PreviousDayPrice", item["PreviousDayPrice"].ToString()},
+//         { "LastTradingDay", item["LastTradingDay"].ToString()},
+//     };
+// }
+// // src_new.ElementAt(5)
+// src_new.Where(x=>x.Key=="2330" || x.Key=="2454")
+
+
+// // src_new.Where(x=>x.Key=="發行量加權股價指數")
+// src_new.Take(10)
+
+
+
 }
 
 
