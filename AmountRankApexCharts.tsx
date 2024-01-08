@@ -34,7 +34,7 @@ const AmountRankApexCharts: React.FC = () => {
     <div>
       {/* <h1>{AmountSum}億</h1> */}
       {/* 中文股名要寬一點，若僅股號可再寬些 */}
-      <Typography variant="subtitle2" align='center' color='primary' noWrap >逐筆明細</Typography>
+      <Typography variant="subtitle2" align='center' color='primary' noWrap >Top20 Trading Amt Sum {AmountSum/10} Billion</Typography>
       <Chart options={options} series={series} type="candlestick" height={285} />
     </div>
   );
