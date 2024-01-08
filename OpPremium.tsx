@@ -1,86 +1,64 @@
 import React, { useState, useEffect } from 'react'
 import {
-    makeStyles, Grid, Box, Typography,
-    TableContainer, Paper, Table, TableHead,
-    TableBody, TableRow, TableCell,
-    Card, AppBar, Tab, Toolbar,
+    makeStyles, Grid, Typography, Table, TableHead, TableBody, TableRow, TableCell,
+    TableContainer, Paper, Card, AppBar, Tab, Toolbar
 } from '@material-ui/core'
 
-export const OpPremium = () => {
+const useStyles = makeStyles({ greenText: { color: "green" }, redText: { color: "red" } });
 
-    const [OpPremium, setOpPremium] = useState<any[]>([])
+export const BlueChips = () => {
+    // map function只適用array，所以obj要套map時只能先轉成「Object.entries()」
+    const [BlueChips, setBlueChips] = useState<any[]>([])
     useEffect(() => {
         const fetchPosts = async () => {
-            try {
-                const response = await fetch('http://localhost:57064/api/OpPremium');
-                if (!response.ok) {
-                    throw new Error('Error fetching data');
-                }
-                const data = await response.json();
-                console.log(data);
-                setOpPremium(data);
-            } catch (error) { console.log(error) }
+            const response = await fetch('http://localhost:57064/api/BlueChips');
+            const data = await response.json();
+            // setBlueChips(data); //純array是這樣寫
+            setBlueChips(Object.entries(data));
+            console.log(data);
         };
         fetchPosts();
     }, []);
 
+    const classes = useStyles();
 
-    // PositionList的API
-    // PositionList的API
-    // PositionList的API
-
-
-    const [Margin, setMargin] = useState<any[]>([])
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await fetch('http://localhost:57064/api/Margin');
-                if (!response.ok) {
-                    throw new Error('Error fetching data');
-                }
-                const data = await response.json();
-                console.log(data);
-                setMargin(data);
-            } catch (error) { console.log(error) }
-        };
-        fetchPosts();
-    }, []);
+    var buySum = Object.values(BlueChips).reduce((acc, val) => acc + val[1][0], 0);
+    var amt = "↗7";
+    var sellSum = "↘7";
 
     return (
         <>
-            <Typography variant="subtitle2" align='center' color='primary' noWrap >選擇權區</Typography>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BCSC</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >Parity +/- Strike</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BPSP</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >庫存<br />權益數</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                        <TableCell rowSpan={2} style={{ textAlign: 'center' }} >{OpPremium[2] - OpPremium[3]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[3]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[1]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[4]}</TableCell>
-                        <TableCell rowSpan={2} style={{ textAlign: 'center' }} >{OpPremium[4] - OpPremium[5]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >沒部位</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[2]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[0]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >{OpPremium[5]}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >{Margin[0]}、{Margin[1]}、{Margin[2]}</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <Typography variant="subtitle2" align='center' color='primary' noWrap>(內盤{amt}) 成交值sum{Math.round(buySum)} (外盤{sellSum})</Typography>
+            <TableContainer style={{ maxHeight: "550px" }}>
+                <Table size="small" style={{ height: "100%" }} stickyHeader>
+                    <TableHead >
+                        <TableRow>
+                            <TableCell>Sid</TableCell>
+                            <TableCell>Chg%</TableCell>
+                            <TableCell>Amt</TableCell>
+                            <TableCell width={10}>T_Type</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {BlueChips.map((i) => (
+                            <TableRow >
+                                <TableCell >{i[0]}</TableCell>
+                                <TableCell >{i[1][0]}</TableCell>
+                                <TableCell >{i[1][1]}</TableCell>
+                                <TableCell align='center' className={(i[1][2]) === "Buy" ? classes.redText : classes.greenText}>
+                                    {i[1][2] === "Buy" ? "　　↗" : "↙　　"}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
 
     )
 }
 
-export default OpPremium
-
-
-
+// export default BlueChips
+// 好像這邊若沒預設匯出的話，在App.tsx匯入時就得用大括包著
+// 也代表一個.tsx可以寫多個  export const BlueChips = () => {}
+// 但光寫一個const就夠長了，寫多個那還得了
