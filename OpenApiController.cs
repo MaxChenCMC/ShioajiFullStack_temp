@@ -165,7 +165,32 @@ namespace ShioajiBackend.Controllers
     }
     #endregion
 
+// var client = new HttpClient();
+// var response = await client.GetAsync("https://openapi.twse.com.tw/v1/" + 
+// "exchangeReport/STOCK_DAY_ALL" //上市個股日成交資訊
+// );
+// var json = await response.Content.ReadAsStringAsync();
+// List<dynamic> src = JsonConvert.DeserializeObject<List<dynamic>>(json);
 
+// // foreach(var i in src
+// // .Where(x=> x.Code == "3027" || x.Code == "2454")
+// // ){Console.WriteLine(i);}
+
+// Dictionary<string, Dictionary<string, object>> src_new = new Dictionary<string, Dictionary<string, object>>();
+// foreach (var item in src)
+// {
+//     src_new[item["Code"].ToString()] = new Dictionary<string, object>
+//     {
+//         { "Name", item["Name"].ToString()},
+//         { "OpeningPrice", item["OpeningPrice"].ToString()},
+//         { "HighestPrice", item["HighestPrice"].ToString()},
+//         { "LowestPrice", item["LowestPrice"].ToString()},
+//         { "ClosingPrice", item["ClosingPrice"].ToString()},
+//         { "Change", item["Change"].ToString()},
+//         { "TradeValue", item["TradeValue"].ToString()},
+//     };
+// }
+// src_new.Where(x=> x.Key == "2609" || x.Key == "2603")
 
 
 }
