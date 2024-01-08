@@ -120,7 +120,7 @@ namespace ShioajiBackend.Controllers
                 _BlueChips.Add(src[i].code, _temp);
             }
             // 莫名變成換股號排序，但想依成交量故在return做linq但好像就判定return出Enumerate型別≠函式的宣告，就判錯了
-            return _BlueChips;
+            return _BlueChips.OrderByDescending(x => x.Value[1]).ToDictionary(entry => entry.Key, entry => entry.Value);
         }
         #endregion
 
