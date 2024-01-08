@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-    AppBar, Toolbar, Box, Grid, Paper, Button, IconButton,
-    Typography,
+    AppBar, Toolbar, Box, Grid, Paper, Typography
 } from '@material-ui/core'
 
 const NavBar = () => {
@@ -38,11 +37,11 @@ const NavBar = () => {
                     <Grid item xs={5}>
                         <Box display="flex" alignItems="center">
                             <Typography variant="h2" align='center' noWrap> 📉 ＭＡＸ 📈 </Typography>
-                            <Typography variant="subtitle2" align='center' noWrap>{Date().toString().slice(0, 10)}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={3}>
                         <Typography variant="h6" align='right' >證：****{TbarTseTxfOtc[0]}<br />期：****{TbarTseTxfOtc[1]}</Typography>
+                        <Typography variant="subtitle2" align='right' noWrap>{Date().toString().slice(0, 10)}</Typography>
                     </Grid>
                 </Grid>
             </Toolbar>
