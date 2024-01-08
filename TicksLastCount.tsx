@@ -22,14 +22,17 @@ export const TicksLastCount = () => {
     return (
         <>
             <Typography variant="subtitle2" align='center' color='primary' noWrap >逐筆明細</Typography>
-            <Table size="small" >
-                {TicksLastCount.map((i) => (
-                    <TableRow  >
-                        <TableCell >{i[0]}</TableCell>
-                        <TableCell >{i[1]}</TableCell>
-                    </TableRow>
-                ))}
-            </Table>
+            <TableContainer style={{ maxHeight: "380px" }}>
+                <Table size="small" >
+                    {TicksLastCount.map((i) => (
+                        <TableRow  >
+                            <TableCell >{i[0]}</TableCell>
+                            <TableCell >{i[1]}</TableCell>
+                        </TableRow>
+                    ))}
+                </Table>
+            </TableContainer>
+
         </>
 
     )
