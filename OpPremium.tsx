@@ -53,7 +53,7 @@ export const OpPremium = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BCSC</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >【Parity Strike Price】</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >Parity +/- Strike</TableCell>
                         <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BPSP</TableCell>
                         <TableCell style={{ textAlign: 'center' }} >庫存<br />權益數</TableCell>
                     </TableRow>
