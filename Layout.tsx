@@ -4,7 +4,7 @@ import AmountRankApexCharts from './AmountRankApexCharts';
 import TicksLastCount from './TicksLastCount';
 import OpPremium from './OpPremium';
 import { BlueChips } from './BlueChips';
-
+import TXFR1Charts from './TXFR1Charts';
 
 // two types of layout: containers and items.
 // Item widths are set in percentages, so they're always fluid and sized relative to their parent element.支援padding
@@ -34,19 +34,19 @@ const Layout = () => {
 
                 <Grid container spacing={1}>
                     <Grid item xs={8} >
+
                         <Grid container spacing={1}>
-                            <Grid item xs={8} >
-                                <Typography variant="subtitle2" align='center' color='primary' noWrap >到時要寫在自己的coponent裡</Typography>
-                                <Paper style={{ height: 380 }}>1分K</Paper>
+                            <Grid item xs={9} >
+                                <TXFR1Charts/>
                             </Grid>
-                            <Grid item xs={4} >
-                                {/* 怎麼cnt 15筆但畫面僅11筆 */}
+                            <Grid item xs={3} >
                                 <TicksLastCount />
                             </Grid>
                             <Grid item xs={12} >
                                 <OpPremium />
                             </Grid>
                         </Grid>
+                        
                     </Grid>
                     <Grid item xs={4} >
                         <BlueChips />
