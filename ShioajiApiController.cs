@@ -28,24 +28,21 @@ namespace ShioajiBackend.Controllers
         #region NavBar
         public List<string> TbarTseTxfOtc()
         {
-            List<object> TbarList = new List<object>();
-            SJList acct = _api.ListAccounts();
-            TbarList.Add(acct[0].account_id.Substring(4, 3));
-            TbarList.Add(acct[1].account_id.Substring(4, 3));
-
             SJList res = _api.Snapshots(new List<IContract>() {
-                _api.Contracts.Futures["TXF"]["TXFR1"],
-                _api.Contracts.Indexs["TSE"]["001"],
-                _api.Contracts.Indexs["OTC"]["101"]
-                });
+                         _api.Contracts.Futures["TXF"]["TXFR1"],
+                         _api.Contracts.Indexs["TSE"]["001"],
+                         _api.Contracts.Indexs["OTC"]["101"]
+                         });
 
-            foreach (var i in res)
+            var res1 = new
             {
-                TbarList.Add(i.close.ToString());
-                TbarList.Add(i.change_price.ToString());
-                TbarList.Add(i.change_rate.ToString());
-            }
-            return TbarList.OfType<string>().ToList();
+                acct = new List<string> { _api.ListAccounts()[0].account_id.Substring(4, 3),
+                                          _api.ListAccounts()[1].account_id.Substring(4, 3) },
+                idx_TXF = new List<object> { res[0].close, res[0].change_price, res[0].change_rate },
+                idx_TSE = new List<object> { res[1].close, res[1].change_price, res[1].change_rate },
+                idx_OTC = new List<object> { res[2].close, res[2].change_price, res[2].change_rate },
+            };
+            return res1;
         }
         #endregion
 
