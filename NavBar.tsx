@@ -15,7 +15,8 @@ const NavBar = () => {
                 }
                 const data = await response.json();
                 console.log(data);
-                setTbarTseTxfOtc(Object.entries(data));
+                // setTbarTseTxfOtc(Object.entries(data));
+                setTbarTseTxfOtc(data);
             } catch (error) { console.log(error) }
         };
         fetchPosts();
@@ -24,7 +25,7 @@ const NavBar = () => {
     return (
         <AppBar position='static' style={{ height: 100, padding: 20 }} >
             <Toolbar>
-                <Grid item container justifyContent="space-evenly" alignItems="center">
+                <Grid item container justifyContent="space-between" alignItems="center">
                     <Grid item xs={1}>
                         <Paper style={{ width: 120, height: 70 }}> 指期：{TbarTseTxfOtc[2]}<br />漲跌：{TbarTseTxfOtc[3]}<br />漲幅：{TbarTseTxfOtc[4]}% </Paper>
                     </Grid>
@@ -40,7 +41,7 @@ const NavBar = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={3}>
-                        <Typography variant="h6" align='right' >證：****{TbarTseTxfOtc[0][1][0]}<br />期：****{TbarTseTxfOtc[0][1][1]}</Typography>
+                        <Typography variant="h6" align='right' >證：****{TbarTseTxfOtc[0]}<br />期：****{TbarTseTxfOtc[1]}</Typography>
                         <Typography variant="subtitle2" align='right' noWrap>{Date().toString().slice(0, 10)}</Typography>
                     </Grid>
                 </Grid>
