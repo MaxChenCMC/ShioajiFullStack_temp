@@ -26,34 +26,28 @@ namespace ShioajiBackend.Controllers
 
 
         #region NavBar
-        public List<string> TbarTseTxfOtc()
+        public List<object> TbarTseTxfOtc()
         {
+            List<object> TbarList = new List<object>();
+            SJList acct = _api.ListAccounts();
+            TbarList.Add(acct[0].account_id.Substring(4, 3));
+            TbarList.Add(acct[1].account_id.Substring(4, 3));
+
             SJList res = _api.Snapshots(new List<IContract>() {
-                         _api.Contracts.Futures["TXF"]["TXFR1"],
-                         _api.Contracts.Indexs["TSE"]["001"],
-                         _api.Contracts.Indexs["OTC"]["101"]
-                         });
+                _api.Contracts.Futures["TXF"]["TXFR1"],
+                _api.Contracts.Indexs["TSE"]["001"],
+                _api.Contracts.Indexs["OTC"]["101"]
+                });
 
-            var res1 = new
+            foreach (var i in res)
             {
-                acct = new List<string> { _api.ListAccounts()[0].account_id.Substring(4, 3),
-                                          _api.ListAccounts()[1].account_id.Substring(4, 3) },
-                idx_TXF = new List<object> { res[0].close, res[0].change_price, res[0].change_rate },
-                idx_TSE = new List<object> { res[1].close, res[1].change_price, res[1].change_rate },
-                idx_OTC = new List<object> { res[2].close, res[2].change_price, res[2].change_rate },
-            };
-            return res1;
+                TbarList.Add(i.close.ToString());
+                TbarList.Add(i.change_price.ToString());
+                TbarList.Add(i.change_rate.ToString());
+            }
+            //return TbarList.OfType<object>().ToList();
+            return TbarList;
         }
-        #endregion
-
-
-        #region ?熱門榜
-
-        #endregion
-
-
-        #region ?乖離榜
-
         #endregion
 
 
@@ -97,6 +91,39 @@ namespace ShioajiBackend.Controllers
         #endregion
 
 
+        #region 台指期最近逐筆明細
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, double> TicksLastCount()
+        {
+            //Ticks TicksQuery = new Ticks();
+            Ticks TicksQuery = _api.Ticks(_api.Contracts.Futures["TXF"]["TXFR1"],
+                "2024-01-09",
+                TicksQueryType.LastCount, last_cnt: 60);
+
+            List<DateTimeOffset> generalTimes = new List<DateTimeOffset>();
+            foreach (long timestamp in TicksQuery.ts)
+            {
+                DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(timestamp / 1000000).UtcDateTime;
+                generalTimes.Add(new DateTimeOffset(dateTime, TimeSpan.Zero));
+            }
+
+            List<string> tsFormat = new List<string>();
+            foreach (var i in generalTimes) tsFormat.Add(i.ToString("HH:mm:ss"));
+
+            Dictionary<string, double> combinedList = new Dictionary<string, double>();
+            for (int i = 0; i < tsFormat.ToArray().Length; i++)
+            {
+                if (combinedList.ContainsKey(tsFormat[i])) { combinedList[tsFormat[i]] = TicksQuery.close[i]; }
+                else { combinedList.Add(tsFormat[i], TicksQuery.close[i]); }
+            }
+            return combinedList.OrderByDescending(x => x.Key).ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+        #endregion
+
+
         #region 權值前20
         /// <summary>
         /// 
@@ -126,7 +153,7 @@ namespace ShioajiBackend.Controllers
             {
                 List<object> _temp = new List<object>();
                 _temp.Add(src[i].change_rate);
-                _temp.Add(Math.Round(src[i].total_amount / 100_000_000d, 2)); 
+                _temp.Add(Math.Round(src[i].total_amount / 100_000_000d, 2));
                 _temp.Add(src[i].tick_type);
                 _BlueChips.Add(src[i].code, _temp);
             }
@@ -135,49 +162,34 @@ namespace ShioajiBackend.Controllers
         #endregion
 
 
-        #region 台指期1分K沒寫完，不曉得OHLC跟TS分兩個變數，react畫圖套件能識別嗎？
-        public dynamic TXFR1Chart(string bgn, string end)
+        #region 台指期1分
+        public object TXFR1Charts()
         {
-            var KBarChart = _api.Kbars(_api.Contracts.Futures["TXF"]["TXFR1"], "2024-01-05", "2024-01-05");
-            long[] ts = KBarChart.ts.ToArray();
+            string bgn = "";
+            string end = "";
+            if (DateTime.Now.TimeOfDay >= new TimeSpan(15, 0, 0) && DateTime.Now.TimeOfDay <= new TimeSpan(23, 59, 59))
+            { end = DateTime.Now.AddDays(+1).ToString("yyyy-MM-dd"); }
+            else { end = DateTime.Now.ToString("yyyy-MM-dd"); }
+            bgn = DateTime.Now.ToString("yyyy-MM-dd");
+
+            object KBarChart = _api.Kbars(_api.Contracts.Futures["TXF"]["TXFR1"], bgn, end);
+            var res = KBarChart.ToDict();
+
+            long[] ts = res["ts"].ToArray();
             DateTime[] dateTimes = Array.ConvertAll(ts, x => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddTicks(x / 100));
-            return null;
-        }
-        #endregion
 
-
-        #region 台指期最近逐筆明細
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<string, double> TicksLastCount()
-        {
-            //Ticks TicksQuery = new Ticks();
-            Ticks TicksQuery = _api.Ticks(_api.Contracts.Futures["TXF"]["TXFR1"],
-                //DateTimeOffset.FromUnixTimeMilliseconds(
-                //    _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"] })[0].ts
-                //    / 1000000).UtcDateTime.ToString("yyyy-MM-dd")
-                "2024-01-09",
-                TicksQueryType.LastCount, last_cnt: 120);
-
-            List<DateTimeOffset> generalTimes = new List<DateTimeOffset>();
-            foreach (long timestamp in TicksQuery.ts)
+            Dictionary<DateTime, List<double>> combinedList = new Dictionary<DateTime, List<double>>();
+            for (int i = 0; i < res["ts"].ToArray().Length; i++)
             {
-                DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(timestamp / 1000000).UtcDateTime;
-                generalTimes.Add(new DateTimeOffset(dateTime, TimeSpan.Zero));
+                List<double> _temp = new List<double>();
+                _temp.Add(res["Open"][i]);
+                _temp.Add(res["High"][i]);
+                _temp.Add(res["Low"][i]);
+                _temp.Add(res["Close"][i]);
+                // combinedList.Add(res["ts"][i], _temp);
+                combinedList.Add(dateTimes[i], _temp);
             }
-
-            List<string> tsFormat = new List<string>();
-            foreach (var i in generalTimes) tsFormat.Add(i.ToString("HH:mm:ss"));
-
-            Dictionary<string, double> combinedList = new Dictionary<string, double>();
-            for (int i = 0; i < tsFormat.ToArray().Length; i++)
-            {
-                if (combinedList.ContainsKey(tsFormat[i])) { combinedList[tsFormat[i]] = TicksQuery.close[i]; }
-                else { combinedList.Add(tsFormat[i], TicksQuery.close[i]); }
-            }
-            return combinedList.OrderByDescending(x => x.Key).ToDictionary(entry => entry.Key, entry => entry.Value);
+            return combinedList.OrderByDescending(entry => entry.Key).Take(60).ToDictionary(entry => entry.Key, entry => entry.Value);
         }
         #endregion
 
@@ -216,24 +228,18 @@ namespace ShioajiBackend.Controllers
 
 
         #region 庫存與權益數
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns> [權益數, 可動用保證金, 風險指標] </returns>
-        public List<decimal> Margin()
+        public List<object> Margin()
         {
             var res = _api.Margin();
-            List<decimal> acct = new List<decimal>();
-            acct.Add(res.equity);
+            var res1 = _api.ListPositions(_api.FutureAccount);
+            List<object> acct = new List<object>();
+            acct.Add(res.equity_amount);
             acct.Add(res.available_margin);
             acct.Add(res.risk_indicator);
+            acct.Add(res1[0].code.Substring(3, 5));
+            acct.Add(res1[1].code.Substring(3, 5));
             return acct;
         }
-        #endregion
-
-
-        #region ?營收棒棒榜
-
         #endregion
 
     }
@@ -267,19 +273,17 @@ namespace ShioajiBackend.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            // 但用linq後就會從{ "1216": [ 0.41, "Sell", 4.87 ], "?": [?,?,?]} 變["1216": [ 0.41, "Sell", 4.87 ], "?": [?,?,?]]
             //.OrderByDescending(x => x.Value[1])
             return Ok(new SJCls().BlueChips());
         }
     }
 
 
-    //沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完沒做完
     [Route("api/[controller]")]
-    public class TXFR1ChartController : ControllerBase
+    public class TXFR1ChartsController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get() { return Ok(new SJCls().TXFR1Chart("2024-01-08", "2024-01-09")); }
+        public IActionResult Get() { return Ok(new SJCls().TXFR1Charts()); }
     }
 
 
@@ -290,7 +294,6 @@ namespace ShioajiBackend.Controllers
         //DateTime.Today.ToString("yyyy-MM-dd")
         public IActionResult Get() { return Ok(new SJCls().TicksLastCount()); }
     }
-
 
 
     [Route("api/[controller]")]
@@ -309,6 +312,4 @@ namespace ShioajiBackend.Controllers
         public IActionResult Get() { return Ok(new SJCls().Margin()); }
     }
 
-
-    // ?
 }
