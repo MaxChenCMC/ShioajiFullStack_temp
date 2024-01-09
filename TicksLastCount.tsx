@@ -22,7 +22,8 @@ export const TicksLastCount = () => {
     return (
         <>
             <Typography variant="subtitle2" align='center' color='primary' noWrap >逐筆明細</Typography>
-            <TableContainer style={{ maxHeight: "380px" }}>
+            {/* <TableContainer style={{ maxHeight: "380px" }}> */}
+            <TableContainer style={{ height: "375px" }}>
                 <Table size="small" >
                     {TicksLastCount.map((i) => (
                         <TableRow  >
