@@ -15,7 +15,7 @@ const NavBar = () => {
                 }
                 const data = await response.json();
                 console.log(data);
-                setTbarTseTxfOtc(data);
+                setTbarTseTxfOtc(Object.entries(data));
             } catch (error) { console.log(error) }
         };
         fetchPosts();
@@ -40,7 +40,7 @@ const NavBar = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={3}>
-                        <Typography variant="h6" align='right' >證：****{TbarTseTxfOtc[0]}<br />期：****{TbarTseTxfOtc[1]}</Typography>
+                        <Typography variant="h6" align='right' >證：****{TbarTseTxfOtc[0][1][0]}<br />期：****{TbarTseTxfOtc[0][1][1]}</Typography>
                         <Typography variant="subtitle2" align='right' noWrap>{Date().toString().slice(0, 10)}</Typography>
                     </Grid>
                 </Grid>
