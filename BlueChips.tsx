@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
-    makeStyles, Grid, Typography,
-    TableContainer, Paper, Table, TableHead,
-    TableBody, TableRow, TableCell,
-    Card, AppBar, Tab, Toolbar
+    makeStyles, Grid, Typography, Table, TableHead, TableBody, TableRow, TableCell,
+    TableContainer, Paper, Card, AppBar, Tab, Toolbar
 } from '@material-ui/core'
 
+const useStyles = makeStyles({ greenText: { color: "green" }, redText: { color: "red" } });
 
 export const BlueChips = () => {
     // map function只適用array，所以obj要套map時只能先轉成「Object.entries()」
@@ -21,31 +20,39 @@ export const BlueChips = () => {
         fetchPosts();
     }, []);
 
-    var AmountSum = Object.values(BlueChips).reduce((acc, val) => acc + val[1][2], 0);
+    const classes = useStyles();
+
+    var buySum = Object.values(BlueChips).reduce((acc, val) => acc + val[1][0], 0);
+    var amt = "↗7";
+    var sellSum = "↘7";
 
     return (
         <>
-            <Typography variant="subtitle2" align='center' color='primary' noWrap>權值股漲跌</Typography>
-            <Table size="small"  >
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Symbol</TableCell>
-                        <TableCell>chg%</TableCell>
-                        <TableCell>AmtSum</TableCell>
-                        <TableCell width={250}>Bid Ask</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {BlueChips.map((i) => (
-                        <TableRow >
-                            <TableCell >{i[0]}</TableCell>
-                            <TableCell >{i[1][0]}</TableCell>
-                            <TableCell >{i[1][1]}</TableCell>
-                            <TableCell >{i[1][2]}</TableCell>
+            <Typography variant="subtitle2" align='center' color='primary' noWrap>(內盤{amt}) 成交值sum{Math.round(buySum)} (外盤{sellSum})</Typography>
+            <TableContainer style={{ maxHeight: "550px" }}>
+                <Table size="small" style={{ height: "100%" }} stickyHeader>
+                    <TableHead >
+                        <TableRow>
+                            <TableCell>Sid</TableCell>
+                            <TableCell>Chg%</TableCell>
+                            <TableCell>Amt</TableCell>
+                            <TableCell width={10}>T_Type</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {BlueChips.map((i) => (
+                            <TableRow >
+                                <TableCell >{i[0]}</TableCell>
+                                <TableCell >{i[1][0]}</TableCell>
+                                <TableCell >{i[1][1]}</TableCell>
+                                <TableCell align='center' className={(i[1][2]) === "Buy" ? classes.redText : classes.greenText}>
+                                    {i[1][2] === "Buy" ? "　　↗" : "↙　　"}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
 
     )
