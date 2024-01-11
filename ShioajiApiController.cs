@@ -73,7 +73,8 @@ namespace ShioajiBackend.Controllers
                 _temp.Add(Math.Round(100 * (Scanners_AmountRank[i].high - _lastClose) / _lastClose, 2));
                 _temp.Add(Math.Round(100 * (Scanners_AmountRank[i].low - _lastClose) / _lastClose, 2));
                 _temp.Add(Math.Round(100 * (Scanners_AmountRank[i].close - _lastClose) / _lastClose, 2));
-                _temp.Add(Math.Round(Scanners_AmountRank[i].total_amount / 100_000_000d, 0));
+                _temp.Add(Math.Round(Scanners_AmountRank[i].total_amount / 100_000_000d, 0)); // 僅OHLC四個值的話有些K棒會畫錯，非得塞V(就算不是張數而是成交量)才畫對
+
                 _AmountRanks.Add(Scanners_AmountRank[i].name, _temp);
             }
             return _AmountRanks;
@@ -146,7 +147,7 @@ namespace ShioajiBackend.Controllers
         public Dictionary<string, List<object>> Snapshots_OpPremium(string OptionWeek, string yyyyMM)
         {
             Dictionary<string, List<object>> combinedList = new Dictionary<string, List<object>>();
-            double close = _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"] })[0].close;
+            double close = _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"]})[0].close;
             var strikeLower = Math.Floor(close / 50) * 50;
             var strikeUpper = strikeLower + 100;
             var res = _api.Snapshots(new List<IContract>() {
