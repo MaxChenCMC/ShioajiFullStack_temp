@@ -11,7 +11,7 @@ export const TicksLastCount = () => {
     const [TicksLastCount, setTicksLastCount] = useState<any[]>([])
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch('http://localhost:9033/api/TicksLastCount');  //57064
+            const response = await fetch('http://localhost:57064/api/TicksLastCount');  //57064 9033
             const data = await response.json();
             setTicksLastCount(Object.entries(data));
         };
@@ -23,7 +23,7 @@ export const TicksLastCount = () => {
         <>
             <Typography variant="subtitle2" align='center' color='primary' noWrap >逐筆明細</Typography>
             {/* <TableContainer style={{ maxHeight: "380px" }}> */}
-            <TableContainer style={{ height: "375px" }}>
+            <TableContainer style={{ height: 455 }}>
                 <Table size="small" >
                     {TicksLastCount.map((i) => (
                         <TableRow  >

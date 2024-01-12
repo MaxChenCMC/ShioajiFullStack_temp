@@ -14,7 +14,7 @@ const TXFR1Charts: React.FC = () => {
     const [TXFR1Charts, setTXFR1Charts] = useState<any[]>([])
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch('http://localhost:9033/api/Kbars_Chart'); //57064
+            const response = await fetch('http://localhost:57064/api/Kbars_Chart'); //57064  9033
             const data = await response.json();
             setTXFR1Charts(data);
             console.log(data);
@@ -27,7 +27,7 @@ const TXFR1Charts: React.FC = () => {
     return (
         <div>
             <Typography variant="subtitle2" align='center' color='primary' noWrap >台指期全日盤1分K</Typography>
-            <Chart options={options} series={series} type="candlestick" height={373} />
+            <Chart options={options} series={series} type="candlestick" height={455} />
         </div>
     );
 };

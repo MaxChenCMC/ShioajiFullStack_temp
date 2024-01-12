@@ -12,7 +12,7 @@ const NavBar = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await fetch('http://localhost:9033/api/ListAccountsSnapshots_NavBar'); //57064
+                const response = await fetch('http://localhost:57064/api/ListAccountsSnapshots_NavBar'); //57064  9033
                 if (!response.ok) { throw new Error('Error fetching data'); }
                 const data = await response.json();
                 console.log(data);
@@ -37,7 +37,7 @@ const NavBar = () => {
                     </Grid>
                     <Grid item xs={5}>
                         <Box display="flex" alignItems="center">
-                            <Typography variant="h2" align='center' noWrap> 📉 ＭＡＸ 📈 </Typography>
+                            <Typography variant="h2" align='center' noWrap>　　 📉 ＭＡＸ 📈 </Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={3}>

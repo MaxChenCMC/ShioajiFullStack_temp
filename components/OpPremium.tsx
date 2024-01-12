@@ -13,7 +13,7 @@ export const OpPremium = () => {
     const [OpPremium, setOpPremium] = useState<_OpPremium>({ strike: [], premium: [] });
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch('http://localhost:9033/api/Snapshots_OpPremium');  // 57064
+            const response = await fetch('http://localhost:57064/api/Snapshots_OpPremium');  // 57064 9033
             const data = await response.json();
             setOpPremium(data);
         };
@@ -23,7 +23,7 @@ export const OpPremium = () => {
     const [MarginListPositions, setMarginListPositions] = useState<_Margin>({ Margin: [], ListPositions: [] });
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch('http://localhost:9033/api/MarginListPositions');  // 57064
+            const response = await fetch('http://localhost:57064/api/MarginListPositions');  // 57064 9033
             const data = await response.json();
             setMarginListPositions(data);
         };
@@ -39,7 +39,8 @@ export const OpPremium = () => {
                         <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BCSC</TableCell>
                         <TableCell style={{ textAlign: 'center' }} >Parity +/- Strike</TableCell>
                         <TableCell style={{ textAlign: 'center' }} colSpan={2}>Vertical Spread<br />BPSP</TableCell>
-                        <TableCell style={{ textAlign: 'center' }} >商品：成本<br />權益數、可出金</TableCell>
+                        <TableCell style={{ textAlign: 'center' }}>商品<br />權益數</TableCell>
+                        <TableCell style={{ textAlign: 'center' }}>成本<br />可出金</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -50,15 +51,17 @@ export const OpPremium = () => {
                         <TableCell style={{ textAlign: 'center' }} >{OpPremium.premium[2]}</TableCell> {/* BP */}
                         <TableCell rowSpan={2} style={{ textAlign: 'center' }} >{OpPremium.premium[2] - OpPremium.premium[3]}</TableCell>
                         <TableCell style={{ textAlign: 'center' }} >
-                            {MarginListPositions.ListPositions[0]}：{MarginListPositions.ListPositions[1]}<br />
-                            {MarginListPositions.ListPositions[2]}：{MarginListPositions.ListPositions[3]}
+                            {MarginListPositions.ListPositions[0]}<br />
+                            {MarginListPositions.ListPositions[2]}
                         </TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{MarginListPositions.ListPositions[1]}<br/>{MarginListPositions.ListPositions[3]}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell style={{ textAlign: 'center' }} >{OpPremium.premium[0]}</TableCell> {/* BC */}
                         <TableCell style={{ textAlign: 'center' }} >{OpPremium.strike[0]}</TableCell>  {/* lower strike */}
                         <TableCell style={{ textAlign: 'center' }} >{OpPremium.premium[3]}</TableCell> {/* SP */}
-                        <TableCell style={{ textAlign: 'center' }} >{MarginListPositions.Margin[0]}、{MarginListPositions.Margin[1]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{MarginListPositions.Margin[0]}</TableCell>
+                        <TableCell style={{ textAlign: 'center' }} >{MarginListPositions.Margin[1]}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>

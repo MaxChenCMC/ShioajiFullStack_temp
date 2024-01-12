@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
-    makeStyles, Table, TableHead, TableBody, TableRow, TableCell, TableContainer,
-    // Paper, Card, AppBar, Tab, Grid,Typography,  Toolbar
+    makeStyles, Table, TableHead, TableBody, TableRow, TableCell, TableContainer,Typography, 
+    // Paper, Card, AppBar, Tab, Grid, Toolbar
 } from '@material-ui/core'
 
 const useStyles = makeStyles({ greenText: { color: "green" }, redText: { color: "red" } });
@@ -13,7 +13,7 @@ export const BlueChips = () => {
     const [BlueChips, setBlueChips] = useState<any[]>([])
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch('http://localhost:9033/api/Snapshots_BlueChips');
+            const response = await fetch('http://localhost:57064/api/Snapshots_BlueChips'); // 57064 9033
             const data = await response.json();
             // map function只適用array，所以C#目前多是return成obj就需要先轉成「Object.entries(data)」才可套map； setBlueChips(data); //純array是這樣寫
             setBlueChips(Object.entries(data));
@@ -27,15 +27,15 @@ export const BlueChips = () => {
 
     return (
         <>
-            {/* <Typography variant="subtitle2" align='center' color='primary' noWrap>(內盤{amt}) 成交值sum{Math.round(buySum)} (外盤{sellSum})</Typography> */}
-            <TableContainer style={{ maxHeight: "550px" }}>
-                <Table size="small" style={{ height: "100%" }} stickyHeader>
+            <Typography variant="subtitle2" align='center' color='primary' noWrap>上市櫃權值股</Typography>
+            <TableContainer style={{ maxHeight: "660px" }}>
+                <Table size="small"  stickyHeader>
                     <TableHead >
                         <TableRow>
                             <TableCell>Sid</TableCell>
                             <TableCell>Chg%</TableCell>
                             <TableCell>Amt</TableCell>
-                            <TableCell width={10}>T_Type</TableCell>
+                            <TableCell>UpDn(x/50)</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -45,7 +45,7 @@ export const BlueChips = () => {
                                 <TableCell >{i[1][0]}</TableCell>
                                 <TableCell >{i[1][1]}</TableCell>
                                 <TableCell align='center' className={(i[1][2]) === "Buy" ? classes.redText : classes.greenText}>
-                                    {i[1][2] === "Buy" ? "　　↗" : "↙　　"}
+                                    {i[1][2] === "Buy" ? "　↗" : "↙　"}
                                 </TableCell>
                             </TableRow>
                         ))}
