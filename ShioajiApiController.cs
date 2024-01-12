@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -7,6 +7,8 @@ using System.Linq;
 using System.IO;
 using System.Text.Json;
 using Sinopac.Shioaji;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace ShioajiBackend.Controllers
 {
@@ -147,7 +149,7 @@ namespace ShioajiBackend.Controllers
         public Dictionary<string, List<object>> Snapshots_OpPremium(string OptionWeek, string yyyyMM)
         {
             Dictionary<string, List<object>> combinedList = new Dictionary<string, List<object>>();
-            double close = _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"]})[0].close;
+            double close = _api.Snapshots(new List<IContract>() { _api.Contracts.Futures["TXF"]["TXFR1"] })[0].close;
             var strikeLower = Math.Floor(close / 50) * 50;
             var strikeUpper = strikeLower + 100;
             var res = _api.Snapshots(new List<IContract>() {
@@ -230,6 +232,58 @@ namespace ShioajiBackend.Controllers
 
 
 
+        public Dictionary<string, List<object>> ScannersChangePercentRank()
+        {
+            // Scanners漲幅榜用linq篩出 $30且過五億的標的 把Code存 List<string>
+            List<string> ls_sids = new List<string>();
+            foreach (var i in _api.Scanners(scannerType: ScannerType.ChangePercentRank, date: DateTime.Now.ToString("yyyy-MM-dd"), count: 50)
+            .Where(x => x.close > 30 && x.total_amount > 500_000_000)) { ls_sids.Add(i.code); }
+
+
+            // 從openapi抓 List<string> 股票們存成 Dictionary<string, List<object>> ☛ { 股號: [股名, 月均價]}
+            var client = new HttpClient();
+            var response = client.GetAsync("https://openapi.twse.com.tw/v1/" + "exchangeReport/STOCK_DAY_AVG_ALL").Result; // 上市個股日收盤價及月平均價
+            var json = response.Content.ReadAsStringAsync().Result;
+            List<dynamic> src = JsonConvert.DeserializeObject<List<dynamic>>(json);
+            Dictionary<string, List<object>> retDict = new Dictionary<string, List<object>>();
+            foreach (var i in src.Where(x => ls_sids.Contains(x.Code.ToString())))
+            {
+                List<object> _retDict = new List<object>();
+                _retDict.Add(i.Name.ToString());
+                _retDict.Add((Double)i.MonthlyAveragePrice);
+                retDict.Add(i.Code.ToString(), _retDict);
+            }
+
+
+            // 同格式的Dictionary<string, List<object>> 另用Snapshots對同群標的做 { 股號: [即時價, 漲額, 成交值億]}
+            var obj_IContract = new List<IContract>();
+            foreach (var i in retDict.Keys)
+                try { obj_IContract.Add(_api.Contracts.Stocks["TSE"][i]); }
+                catch (Exception ex) { obj_IContract.Add(_api.Contracts.Stocks["OTC"][i]); }
+
+            Dictionary<string, List<object>> retDict1 = new Dictionary<string, List<object>>();
+            foreach (var i in _api.Snapshots(obj_IContract))
+            {
+                List<object> _retDict1 = new List<object>();
+                _retDict1.Add(i.close);
+                _retDict1.Add(i.change_rate);
+                _retDict1.Add(Math.Round(i.total_amount / 100_000_000d, 2));
+                retDict1.Add(i.code, _retDict1);
+            }
+
+
+            // 把兩個Dictionary<string, List<object>>併起來再補上乖離 { 股號: [股名, 月均價, 即時價, 漲額, 成交值億, 距月均價%]}
+            var ret = retDict.Concat(retDict1).GroupBy(kvp => kvp.Key).ToDictionary(g => g.Key, g => g.SelectMany(kvp => kvp.Value).ToList());
+            foreach (var i in ret.Keys) { ret[i].Add(Math.Round(
+                ((double)ret[i][2] / (double)ret[i][1]) - 1
+                , 2)); }
+
+            // 篩漲超過月線x%的    ret
+            return ret.Where(x => (Double)x.Value[5] >= 0.00).ToDictionary(x => x.Key, x => x.Value);
+        }
+
+
+
 
     }
     //==========================================================================
@@ -290,5 +344,15 @@ namespace ShioajiBackend.Controllers
         [HttpGet]
         public IActionResult Get() { return Ok(new SJCls().Snapshots_BlueChips()); }
     }
+
+
+    [Route("api/[controller]")]
+    public class ScannersChangePercentRankController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Get() { return Ok(new SJCls().ScannersChangePercentRank()); }
+    }
+
+
 
 }
