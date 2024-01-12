@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Box, Paper, Grid, styled } from '@mui/material';
+import {Paper, Grid } from '@mui/material';
 
 import AmountRankApexCharts from './AmountRankApexCharts';
 import TicksLastCount from './TicksLastCount';
@@ -7,6 +7,7 @@ import OpPremium from './OpPremium';
 import { BlueChips } from './BlueChips';
 import TXFR1Charts from './TXFR1Charts';
 import NavBar from './NavBar';
+import ScannersChangePercentRank from './ScannersChangePercentRank';
 
 // two types of layout: containers and items.
 // Item widths are set in percentages, so they're always fluid and sized relative to their parent element.支援padding
@@ -25,7 +26,7 @@ import NavBar from './NavBar';
 const Layout = () => {
     return (
         <Grid container spacing={1} paddingTop={1} paddingLeft={1} paddingRight={1}>
-            <NavBar/>
+            <NavBar />
             {/* Grid有要細切就要container包item */}
             <Grid item xs={9}> {/* 橫K垂直區 */}
 
@@ -40,19 +41,19 @@ const Layout = () => {
 
                         <Grid container spacing={0}>
                             <Grid item xs={8.5}>  {/*1分K*/}
-                                <TXFR1Charts/>
+                                <TXFR1Charts />
                             </Grid>
                             <Grid item xs={3.5}>  {/*逐筆 */}
                                 <TicksLastCount />
                             </Grid>
                             <Grid item xs={12} > {/*選擇權區 */}
-                                <OpPremium/>
+                                <OpPremium />
                             </Grid>
                         </Grid>
-                        
+
                     </Grid>
                     <Grid item xs={4.5}>
-                        <BlueChips/>  {/*藍籌股區 */}
+                        <BlueChips />  {/*藍籌股區 */}
                     </Grid>
                 </Grid>
 
@@ -66,7 +67,9 @@ const Layout = () => {
 
                 <Grid container spacing={1}>
                     <Grid item xs={12} >
-                        <Paper style={{ height: 440, textAlign: 'center' }}>自選股1</Paper>
+                        <Paper style={{ height: 440, textAlign: 'center' }}>
+                            <ScannersChangePercentRank/>
+                        </Paper>
                     </Grid>
                     <Grid item xs={12}>
                         <Paper style={{ height: 440, textAlign: 'center' }}>自選股2</Paper>
