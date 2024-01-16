@@ -285,6 +285,46 @@ namespace ShioajiBackend.Controllers
 
 
 
+// var src = _api.ListProfitLossSummary(DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd"), DateTime.Now.ToString("yyyy-MM-dd"), _api.FutureAccount).profitloss_summary;
+
+// Dictionary<string, List<object>> retDict = new Dictionary<string, List<object>>();
+// foreach (var i in src)
+// {
+//     List<object> _retDict = new List<object>();
+//     _retDict.Add("_" + i.code.Substring(3, 7).PadLeft(10));
+//     _retDict.Add(i.direction.PadRight(10)+'_');
+//     _retDict.Add(i.quantity);
+//     _retDict.Add(i.entry_price);
+//     _retDict.Add(i.cover_price);
+//     _retDict.Add(i.pnl);
+//     retDict.Add(i.code, _retDict);
+// }
+// retDict.Display();
+// src
+
+
+
+// //        _api.ListPositionDetail(_api.FutureAccount)
+// var src = _api.ListPositions(_api.FutureAccount);
+// Dictionary<string, List<object>> retDict = new Dictionary<string, List<object>>();
+// foreach (var i in src)
+// {
+//     List<object> _retDict = new List<object>();
+//     _retDict.Add(i.code.Substring(3, 7));
+//     _retDict.Add(i.direction);
+//     _retDict.Add(i.quantity);
+//     _retDict.Add(i.price);
+//     _retDict.Add(i.last_price);
+//     _retDict.Add(i.pnl);
+//     retDict.Add(i.code, _retDict);
+// }
+// retDict.Display();
+// src     
+
+
+
+        
+
     }
     //==========================================================================
     [ApiController]//===========================================================
