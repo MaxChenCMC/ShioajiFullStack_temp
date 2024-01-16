@@ -4,20 +4,29 @@ import {
     // Paper, Card, AppBar, Tab, Grid,Typography,  Toolbar
 } from '@material-ui/core'
 
+interface ScannerEntry {
+    [key: string]: [string, number, number, number, number, number];
+}
 
-const ScannersChangePercentRank = () => {
+const ScannersChangePercentRank: React.FC = () => {
 
-    const [ScannersChangePercentRank, setScannersChangePercentRank] = useState<any[]>([])
+    const [ScannersChangePercentRank, setScannersChangePercentRank] = useState<ScannerEntry[]>([]);
+
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await fetch('http://localhost:9033/api/ScannersChangePercentRank'); //57064
             const data = await response.json();
-            setScannersChangePercentRank(Object.entries(data));
-            console.log(data);
+
+            const dataArray: ScannerEntry[] = Object.entries(data).map(([key, value]) => ({
+                [key]: value as [string, number, number, number, number, number],
+            }));
+
+            dataArray.sort((a, b) => b[Object.keys(b)[0]][2] - a[Object.keys(a)[0]][2]);
+            setScannersChangePercentRank(dataArray);
+            console.table(dataArray);
         };
         fetchPosts();
     }, []);
-
 
     return (
         <>
@@ -32,12 +41,12 @@ const ScannersChangePercentRank = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {ScannersChangePercentRank.map((i) => (
-                            <TableRow >
-                                <TableCell >{i[1][0]}</TableCell>
-                                <TableCell >{i[1][2]}</TableCell>
-                                <TableCell >{i[1][3]}</TableCell>
-                                <TableCell >{Math.round(100 * i[1][5])}%</TableCell>
+                        {ScannersChangePercentRank.map((entry, index) => (
+                            <TableRow key={index}>
+                                <TableCell >{Object.keys(entry)[0]}</TableCell>
+                                <TableCell >{entry[Object.keys(entry)[0]][2]}</TableCell>
+                                <TableCell >{entry[Object.keys(entry)[0]][3]}</TableCell>
+                                <TableCell >{Math.round(100 * entry[Object.keys(entry)[0]][5])}%</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
