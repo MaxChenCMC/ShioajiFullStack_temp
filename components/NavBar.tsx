@@ -12,11 +12,11 @@ const NavBar = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await fetch('http://localhost:57064/api/ListAccountsSnapshots_NavBar'); //57064  9033
+                const response = await fetch('http://localhost:9033/api/ListAccountsSnapshots_NavBar');
                 if (!response.ok) { throw new Error('Error fetching data'); }
                 const data = await response.json();
-                console.log(data);
-                setTbarTseTxfOtc(data);      // setTbarTseTxfOtc(Object.entries(data));
+                setTbarTseTxfOtc(data);
+                console.table(data);
             } catch (error) { console.log(error) }
         };
         fetchPosts();
@@ -37,12 +37,15 @@ const NavBar = () => {
                     </Grid>
                     <Grid item xs={5}>
                         <Box display="flex" alignItems="center">
-                            <Typography variant="h2" align='center' noWrap>　　 📉 ＭＡＸ 📈 </Typography>
+                            <Typography variant="h2" align='center' noWrap> 📉 ＭＡＸ 📈 </Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={3}>
-                        <Typography variant="h6" align='right' >證：****{TbarTseTxfOtc.Acct[0]}<br />期：****{TbarTseTxfOtc.Acct[1]}</Typography>
-                        <Typography variant="subtitle2" align='right' noWrap>{Date().toString().slice(0, 10)}</Typography>
+                        <Typography variant="h6" align='right' >
+                            證：****{TbarTseTxfOtc.Acct[0]}<br />
+                            期：****{TbarTseTxfOtc.Acct[1]}<br />
+                            {Date().toString().slice(0, 10)}
+                        </Typography>
                     </Grid>
                 </Grid>
             </Toolbar>

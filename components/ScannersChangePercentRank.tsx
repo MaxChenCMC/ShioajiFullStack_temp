@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
     Table, TableHead, TableBody, TableRow, TableCell, TableContainer,
-    // Paper, Card, AppBar, Tab, Grid,Typography,  Toolbar
 } from '@material-ui/core'
 
 interface ScannerEntry {
@@ -10,18 +9,18 @@ interface ScannerEntry {
 
 const ScannersChangePercentRank: React.FC = () => {
 
+    // 為了把fetch的資料排序，不能再無腦用 useState <any[]> ([]), 而需添一個interface
     const [ScannersChangePercentRank, setScannersChangePercentRank] = useState<ScannerEntry[]>([]);
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch('http://localhost:9033/api/ScannersChangePercentRank'); //57064
+            const response = await fetch('http://localhost:9033/api/ScannersChangePercentRank');
             const data = await response.json();
 
             const dataArray: ScannerEntry[] = Object.entries(data).map(([key, value]) => ({
                 [key]: value as [string, number, number, number, number, number],
             }));
-
-            dataArray.sort((a, b) => b[Object.keys(b)[0]][2] - a[Object.keys(a)[0]][2]);
+            dataArray.sort((a, b) => b[Object.keys(b)[0]][4] - a[Object.keys(a)[0]][4]);
             setScannersChangePercentRank(dataArray);
             console.table(dataArray);
         };
@@ -34,10 +33,10 @@ const ScannersChangePercentRank: React.FC = () => {
                 <Table size="small" stickyHeader>
                     <TableHead >
                         <TableRow>
-                            <TableCell>名</TableCell>
-                            <TableCell>收</TableCell>
-                            <TableCell>幅</TableCell>
-                            <TableCell>乖</TableCell>
+                            <TableCell>symbol</TableCell>
+                            <TableCell>close</TableCell>
+                            <TableCell>chg%</TableCell>
+                            <TableCell>bias</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -56,3 +55,23 @@ const ScannersChangePercentRank: React.FC = () => {
     );
 }
 export default ScannersChangePercentRank
+
+
+// {
+//     "3029": [
+//         "零壹",
+//         65.75,
+//         69.9,
+//         5.43,
+//         7.99,
+//         0.06
+//     ],
+//         "3036": [
+//             "文曄",
+//             120.27,
+//             147,
+//             9.29,
+//             70.2,
+//             0.22
+//         ]
+// }
