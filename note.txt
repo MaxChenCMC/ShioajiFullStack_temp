@@ -19,6 +19,7 @@ nuget裝Shioaji
 	
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
                ＲＥＡＣＴ
+$ npm create vite@latest prjname -- --template react-ts
 在CORE目標目錄路徑處輸入cmd ☛ npx create-react-app prj-name --template typescript
 npm create vite@latest --react --typescript    fbl-test --template typescript
 npm create vite@latest yourprjname ☛ React ☛typescript
