@@ -1,11 +1,14 @@
-import jsonBlueChips from '.MockData';
+import {BlueChip} from '.MockData';
 
 interface Props {
-    dataType: jsonBlueChips[]
+    test: BlueChip[]
 }
 
+const tempBlueChips = ({test}: Props) => {
 
-const jsonTable = ({ test }: Props) => {
-    return <h1>sfsdfsdf</h1>
+    
+  return (
+    <div>tempBlueChips</div>
+  )
 }
-export default tempBlueChips;
+// export default tempBlueChips;
