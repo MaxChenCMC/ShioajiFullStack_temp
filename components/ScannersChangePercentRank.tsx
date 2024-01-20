@@ -55,23 +55,3 @@ const ScannersChangePercentRank: React.FC = () => {
     );
 }
 export default ScannersChangePercentRank
-
-
-// {
-//     "3029": [
-//         "零壹",
-//         65.75,
-//         69.9,
-//         5.43,
-//         7.99,
-//         0.06
-//     ],
-//         "3036": [
-//             "文曄",
-//             120.27,
-//             147,
-//             9.29,
-//             70.2,
-//             0.22
-//         ]
-// }
