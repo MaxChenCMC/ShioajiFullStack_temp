@@ -16,7 +16,7 @@ const AmountRankApexCharts: React.FC = () => {
       const response = await fetch('http://localhost:9033/api/ScannersAmountRank');
       const data = await response.json();
       setAmountRank(data);
-      console.table(data);
+      // console.table(data);
     };
     fetchPosts();
   }, []);
