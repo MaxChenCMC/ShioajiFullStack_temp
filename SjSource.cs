@@ -61,10 +61,10 @@ namespace SjSource
         #region 成交值前20大 K棒速覽
         public Dictionary<string, List<double>> ScannersAmountRank()
         {
-            string yyyyMMdd = "";
-            if (DateTime.Now.TimeOfDay >= new TimeSpan(0, 0, 0) && DateTime.Now.TimeOfDay <= new TimeSpan(8, 59, 59))
-            { yyyyMMdd = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"); }
-            else { yyyyMMdd = DateTime.Today.ToString("yyyy-MM-dd"); }
+            string yyyyMMdd = "2024-01-19";
+            //if (DateTime.Now.TimeOfDay >= new TimeSpan(0, 0, 0) && DateTime.Now.TimeOfDay <= new TimeSpan(8, 59, 59))
+            //{ yyyyMMdd = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"); }
+            //else { yyyyMMdd = DateTime.Today.ToString("yyyy-MM-dd"); }
 
             var Scanners_AmountRank = _api.Scanners(scannerType: ScannerType.AmountRank, date: yyyyMMdd, count: 20);
             Dictionary<string, List<double>> _AmountRanks = new Dictionary<string, List<double>>();
@@ -212,7 +212,8 @@ namespace SjSource
         {
             // Scanners漲幅榜用linq篩出 $20且過五億的標的 把Code存 List<string>
             List<string> ls_sids = new List<string>();
-            foreach (var i in _api.Scanners(scannerType: ScannerType.ChangePercentRank, date: DateTime.Now.ToString("yyyy-MM-dd"), count: 50)
+            //foreach (var i in _api.Scanners(scannerType: ScannerType.ChangePercentRank, date: DateTime.Now.ToString("yyyy-MM-dd"), count: 50)
+            foreach (var i in _api.Scanners(scannerType: ScannerType.ChangePercentRank, date: "2024-01-19", count: 50)
             .Where(x => x.close > 20 && x.total_amount > 500_000_000)) { ls_sids.Add(i.code); }
 
 
@@ -313,8 +314,8 @@ namespace SjSource
         /// <returns></returns>
         public Dictionary<string, List<object>> ListProfitLossSummary()
         {
-            var src = _api.ListProfitLossSummary(DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd"), DateTime.Now.ToString("yyyy-MM-dd"), _api.FutureAccount).profitloss_summary;
-
+            //var src = _api.ListProfitLossSummary(DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd"), DateTime.Now.ToString("yyyy-MM-dd"), _api.FutureAccount).profitloss_summary;
+            var src = _api.ListProfitLossSummary("2024-01-17", "2024-01-17", _api.FutureAccount).profitloss_summary;
             try
             {
                 //
@@ -345,16 +346,19 @@ namespace SjSource
         #region 這邊不會報錯但controller那邊不知道怎麼調用
         public static void CB()
         {
-            _api.SetQuoteCallback_v1(MyQuoteCB_v1);
             _api.Subscribe(
-                contract: _api.Contracts.Futures["TXF"]["TXFR1"],
-                quoteType: QuoteType.bidask,
-                version: QuoteVersion.v1
+                contract: _api.Contracts.Futures["TXF"]["TXFR1"]
+                //,quoteType: QuoteType.bidask
+                //,version: QuoteVersion.v1
             ); 
+
+            _api.SetQuoteCallback_v1(MyQuoteCB_v1);
         }
         private static void MyQuoteCB_v1(Exchange exchange, dynamic quote)
         {
-            Console.WriteLine($"QuoteCB_v1 | Exchange.{exchange} {quote.GetType().Name} {quote}");
+            Console.WriteLine($"QuoteCB_v1 | Exchange.{exchange}");
+            Console.WriteLine($"QuoteCB_v1 | Exchange.{quote.GetType().Name}");
+            Console.WriteLine($"QuoteCB_v1 | Exchange.{quote}");
         }
         #endregion
     }
