@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Linq;
@@ -308,38 +308,61 @@ namespace SjSource
 
 
         #region 歷史損益
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public Dictionary<string, List<object>> ListProfitLossSummary()
         {
-            //var src = _api.ListProfitLossSummary(DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd"), DateTime.Now.ToString("yyyy-MM-dd"), _api.FutureAccount).profitloss_summary;
-            var src = _api.ListProfitLossSummary("2024-01-17", "2024-01-17", _api.FutureAccount).profitloss_summary;
+            Dictionary<string, List<object>> retDict = new Dictionary<string, List<object>>();
             try
             {
-                //
+                dynamic src = _api.ListProfitLossSummary("2024-01-16", "2024-01-16", _api.FutureAccount).profitloss_summary;
+                foreach (var i in src)
+                {
+                    List<object> _retDict = new List<object>();
+                    _retDict.Add(i.code.Substring(3, 7));
+                    _retDict.Add(i.direction);
+                    _retDict.Add(i.quantity);
+                    _retDict.Add(i.entry_price);
+                    _retDict.Add(i.cover_price);
+                    _retDict.Add(i.pnl);
+                    retDict.Add(i.code, _retDict);
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"無值{e.Message}難道是日期問題！？");
-            }
-
-            Dictionary<string, List<object>> retDict = new Dictionary<string, List<object>>();
-            foreach (var i in src)
-            {
-                List<object> _retDict = new List<object>();
-                _retDict.Add(i.code.Substring(3, 7));
-                _retDict.Add(i.direction);
-                _retDict.Add(i.quantity);
-                _retDict.Add(i.entry_price);
-                _retDict.Add(i.cover_price);
-                _retDict.Add(i.pnl);
-                retDict.Add(i.code, _retDict);
+                Console.WriteLine($"無值{e.Message}區間只要任一日無資料就噴錯");
+                Console.WriteLine($"無值{e.InnerException}這是什麼？");
+                retDict.Add(e.Message, new List<object>() { });
             }
             return retDict;
         }
         #endregion
+
+
+        public dynamic anonListProfitLossSummary(string bgn, string end)
+        {
+            List<object> _temp = new List<object>();
+
+            try
+            {
+                var src = _api.ListProfitLossSummary(bgn, end, _api.FutureAccount).profitloss_summary[0];
+                var productAnonymous = new
+                {
+                    code1 = (src.code.Substring(3, 5)) + (src.code[8] < 'L' ? "Call" : "Put"),
+                    direction = src.direction,
+                    entry_price = src.entry_price,
+                    cover_price = src.cover_price,
+                    netPnl = src.pnl - src.fee - src.tax
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"無值{e.Message}區間只要任一日無資料就噴錯");
+                Console.WriteLine($"無值{e.InnerException}這是什麼？");
+                //retDict.Add(e.Message, new List<object>() { });
+            }
+
+            return _temp;
+        }
+
 
 
         //==========================================================================
@@ -361,5 +384,9 @@ namespace SjSource
             Console.WriteLine($"QuoteCB_v1 | Exchange.{quote}");
         }
         #endregion
+
+
+
+
     }
 }
