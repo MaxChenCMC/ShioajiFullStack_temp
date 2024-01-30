@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +90,7 @@ namespace SjSource.Controllers
     }
 
 
-    //==========================================================================
+    //=================================================================================================
     /// <summary>
     /// 庫存
     /// </summary>
@@ -135,4 +135,21 @@ namespace SjSource.Controllers
                 );
         }
     }
+
+
+    [Route("api/[controller]")]
+    public class _anonListProfitLossSummary : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(
+                new SJ().anonListProfitLossSummary()
+                );
+        }
+    }
+
+
+    //==========================================================================
+
 }
